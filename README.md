@@ -1,4 +1,4 @@
-# WSI michal pedziwiatr
+# WSI Michał Pędziwiatr
 
 
 
