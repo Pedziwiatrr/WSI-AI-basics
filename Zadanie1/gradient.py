@@ -15,7 +15,7 @@ def f(x):
 
 def f_derivative(x):
     if -4 * math.pi < x < 4 * math.pi:
-        return 1 + 2 * math.cos(x)
+        return (1 + 2 * math.cos(x),)
     else:
         return None
 
@@ -38,19 +38,26 @@ def g_derivative(x, y):
         return None
 
 
-def grad_descent(derivative, learning_rate, position, step_count=100, find_min=True):
+def grad_descent(derivative, learning_rate, args, step_count=100, find_min=True):
     if find_min:
         learning_rate = -learning_rate
         # domyślnie dążymy do minimum. Jeśli find_min = False, funkcja będzie dążyć do maksimum
     for i in range(step_count):
-        new_position = [
-            variable + learning_rate * derivative(*position) for variable in position
+        new_args = [
+            variable + learning_rate * derivative(*args)[i]
+            for i, variable in enumerate(args)
         ]
-        position = new_position
+        args = new_args
 
-    return position
+    return args
 
 
 if __name__ == "__main__":
-    position = grad_descent(f_derivative, 0.01, [f(random.uniform(-2, 2))], 1000)
-    print(position)
+    random_x = random.uniform(-4 * math.pi, 4 * math.pi)
+    args = grad_descent(f_derivative, 0.01, [random_x], 1000)
+    print(args)
+
+    random_x = random.uniform(-2, 2)
+    random_y = random.uniform(-2, 2)
+    args = grad_descent(g_derivative, 0.01, [random_x, random_y])
+    print(args)
