@@ -1,4 +1,5 @@
 import math
+import random
 
 # Nr indeksu: 331421 => A = 1, B = 2, C = 4
 # 1: f(x) = x + 2sin(x),    D = (-4pi, 4pi)
@@ -19,5 +20,9 @@ def g(x, y):
         return None
 
 
-def grad_descent(function):
-    pass
+def grad_descent(function, learning_rate, position, step_count=100, find_min=True):
+    if find_min:
+        learning_rate = -learning_rate
+    for i in range(step_count):
+        new_position = position + learning_rate  # * pochodna
+        position = new_position
