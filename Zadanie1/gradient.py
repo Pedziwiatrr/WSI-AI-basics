@@ -1,5 +1,6 @@
 import math
 import random
+import matplotlib.pyplot as plt
 
 # Nr indeksu: 331421 => A = 1, B = 2, C = 4
 # 1: f(x) = x + 2sin(x),    D = (-4pi, 4pi)
@@ -38,10 +39,14 @@ def g_derivative(x, y):
         return None
 
 
-def grad_descent(derivative, learning_rate, args, step_count=100, find_min=True):
+def grad_descent(
+    function, derivative, domain, learning_rate, args, step_count=100, find_min=True
+):
     if find_min:
         learning_rate = -learning_rate
         # domyślnie dążymy do minimum. Jeśli find_min = False, funkcja będzie dążyć do maksimum
+
+    path = [args]
 
     for i in range(step_count):
         try:
@@ -55,16 +60,42 @@ def grad_descent(derivative, learning_rate, args, step_count=100, find_min=True)
             break
             # TypeError oznacza wyjście poza dziedzinę (None jako wartość funkcji derivative)
         args = new_args
+        path.append(args)
+
+    if len(args) == 1:
+        two_dimensions_chart(function, domain, path)
 
     return args
 
 
+def two_dimensions_chart(function, domain, path):
+    x_values = [x / 100 for x in range(int(domain[0] * 100), int(domain[1] * 100))]
+    y_values = [function(x) for x in x_values]
+    plt.plot(
+        x_values,
+        y_values,
+        label="Ścieżka algorytmu gradientu dla funkcji " + str(function),
+    )
+
+    path_x = [position[0] for position in path]
+    path_y = [function(x) for x in path_x]
+    plt.plot(
+        path_x,
+        path_y,
+        "ro",
+        label="Ścieżka algorytmu gradientu dla funkcji " + str(function),
+    )
+    plt.show()
+
+
 if __name__ == "__main__":
     random_x = random.uniform(-4 * math.pi, 4 * math.pi)
-    args = grad_descent(f_derivative, 0.01, [random_x], 1000)
+    args = grad_descent(
+        f, f_derivative, (-4 * math.pi, 4 * math.pi), 0.01, [random_x], 1000
+    )
     print(args)
 
     random_x = random.uniform(-2, 2)
     random_y = random.uniform(-2, 2)
-    args = grad_descent(g_derivative, 0.01, [random_x, random_y])
+    args = grad_descent(g, g_derivative, (-2, 2), 0.01, [random_x, random_y])
     print(args)
