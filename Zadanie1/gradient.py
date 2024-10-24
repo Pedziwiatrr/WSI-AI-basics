@@ -99,20 +99,39 @@ def three_dimensions_chart(function, domain, path):
 
     X, Y = np.meshgrid(x_values, y_values)
     Z = function(X, Y)
-    ax.plot_surface(X, Y, Z, cmap=plt.cm.YlGnBu_r)
+    ax.plot_surface(X, Y, Z, cmap=plt.cm.YlGnBu_r, alpha=0.5)
 
     path_x = [position[0] for position in path]
     path_y = [position[1] for position in path]
     path_z = [function(x, y) for x, y in zip(path_x, path_y)]
 
-    ax.plot(path_x, path_y, path_z, color="red", linewidth=5, label="Ścieżka gradientu")
+    ax.plot(
+        path_x,
+        path_y,
+        path_z,
+        color="red",
+        linewidth=5,
+        label="Ścieżka gradientu",
+        alpha=0.5,
+    )
+    ax.scatter3D(
+        path_x[0],
+        path_y[0],
+        path_z[0],
+        color="green",
+        s=75,
+        label="Punkt startowy",
+        zorder=2,
+    )
 
     ax.set_xlabel("X")
     ax.set_ylabel("Y")
     ax.set_zlabel("Z")
     ax.legend()
-
-    plt.show()
+    plt.savefig(
+        "./Zadanie1/wykresy/gradient_wykres_3d.png", dpi=500, bbox_inches="tight"
+    )
+    # plt.show()
 
 
 if __name__ == "__main__":
