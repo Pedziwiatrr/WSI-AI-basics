@@ -217,9 +217,12 @@ def generate_points(
             elif dim == 3:
                 points = [(-0.7, -0.7), (0.7, 0.7)]
     else:
-        points.append(random.uniform(domain[0][0], domain[0][1]))
+        random_x = random.uniform(domain[0][0], domain[0][1])
         if dim == 3:
-            points.append(random.uniform(domain[1][0], domain[1][1]))
+            random_y = random.uniform(domain[1][0], domain[1][1])
+            points.append((random_x, random_y))
+        else:
+            points.append(random_x)
     return points
 
 
@@ -233,7 +236,7 @@ if __name__ == "__main__":
     else:
         params = generate_test_params()
 
-    points = generate_points(False, min=descent)
+    points = generate_points(True, min=descent)
 
     print("=" * 100)
 
@@ -258,7 +261,7 @@ if __name__ == "__main__":
                 f_derivative,
                 [(-4 * math.pi, 4 * math.pi)],
                 learning_rate,
-                [-8 / 3 * math.pi],
+                [points[0]],
                 max_step_count,
                 find_min=descent,
                 plot=True,
@@ -271,7 +274,7 @@ if __name__ == "__main__":
             print(f"Punkt końcowy: x = {args[0]}, y = {f(args[0])}")
 
     plt.show()
-    points = generate_points(False, [(-2, 2), (-2, 2)], descent, 3)
+    points = generate_points(True, [(-2, 2), (-2, 2)], descent, 3)
     print("=" * 100)
 
     if show_all_ex:
