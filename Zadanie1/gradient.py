@@ -36,7 +36,7 @@ def grad_descent(
     domain,
     learning_rate,
     args,
-    step_count=100,
+    step_count=500,
     find_min=True,
     plot=True,
 ):
@@ -116,7 +116,7 @@ def two_dimensions_chart(function, domain, path, gradient_params, time):
         dpi=500,
         bbox_inches="tight",
     )
-    plt.show()
+    # plt.show()
 
 
 def three_dimensions_chart(function, domain, path, gradient_params, time):
@@ -173,30 +173,71 @@ def generate_test_params():
     learning_rates = [0.1, 0.05, 0.001]
     max_step_counts = [10, 100, 500, 1000, 5000]
     test_params = []
+
     for lr in learning_rates:
         for msc in max_step_counts:
             test_params.append((lr, msc))
+
     return test_params
 
 
+def generate_points(
+    random_points=True, domain=[(-4 * math.pi, 4 * math.pi)], min=True, dim=2
+):
+    points = []
+    if not random_points:
+        if min:
+            if dim == 2:
+                points = [
+                    -4 * math.pi,
+                    -8 / 3 * math.pi,
+                    -2 / 3 * math.pi,
+                    4 / 3 * math.pi,
+                    10 / 3 * math.pi,
+                    4 * math.pi,
+                ]
+            elif dim == 3:
+                points = [(0.7, -0.7), (-0.7, 0.7)]
+        elif not min:
+            if dim == 2:
+                points = [
+                    4 * math.pi,
+                    8 / 3 * math.pi,
+                    2 / 3 * math.pi,
+                    -4 / 3 * math.pi,
+                    -10 / 3 * math.pi,
+                    -4 * math.pi,
+                ]
+            elif dim == 3:
+                points = [(-0.7, -0.7), (0.7, 0.7)]
+    else:
+        points.append(random.uniform(domain[0][0], domain[0][1]))
+        if dim == 3:
+            points.append(random.uniform(domain[1][0], domain[1][1]))
+    return points
+
+
 if __name__ == "__main__":
-    random_x = random.uniform(-4 * math.pi, 4 * math.pi)
-    values_test = True
+
+    values_test = False
     descent = True
 
     if not values_test:
-        params = 0.05, 1000
+        params = [(0.001, 5000)]
     else:
         params = generate_test_params()
 
+    points = generate_points(True)
+
     print("=" * 100)
+
     for learning_rate, max_step_count in params:
         args, total_time = grad_descent(
             f,
             f_derivative,
             [(-4 * math.pi, 4 * math.pi)],
             learning_rate,
-            [random_x],
+            [-8 / 3 * math.pi],
             max_step_count,
             find_min=descent,
             plot=True,
@@ -205,12 +246,12 @@ if __name__ == "__main__":
         print(
             f"\nFunkcja f(x) : współczynnik długości kroku: {learning_rate}, max ilość kroków: {max_step_count}, czas: {total_time:.6f}s"
         )
-        print(f"Punkt startowy: x = {random_x}, y = {f(random_x)}")
+        print(f"Punkt startowy: x = {points[0]}, y = {f(points[0])}")
         print(f"Punkt końcowy: x = {args[0]}, y = {f(args[0])}")
 
-    random_x = random.uniform(-2, 2)
-    random_y = random.uniform(-2, 2)
+    points = generate_points(True, [(-2, 2), (-2, 2)], True, 3)
     print("=" * 100)
+    # plt.show()
 
     for learning_rate, max_step_count in params:
         args, total_time = grad_descent(
@@ -218,18 +259,19 @@ if __name__ == "__main__":
             g_derivative,
             [(-2, 2), (-2, 2)],
             learning_rate,
-            [random_x, random_y],
+            [points[0], points[1]],
             max_step_count,
             find_min=descent,
-            plot=True,
+            plot=False,
         )
         print(
             f"\nFunkcja g(x,y) : długość kroku: {learning_rate}, max ilość kroków: {max_step_count}, czas: {total_time:.6f}s"
         )
         print(
-            f"Punkt startowy: x = {random_x}, y = {random_y}, z = {g(random_x, random_y)}"
+            f"Punkt startowy: x = {points[0]}, y = {points[1]}, z = {g(points[0], points[1])}"
         )
         print(
             f"Punkt końcowy: x = {args[0]}, y = {args[1]}, z = {g(args[0], args[1])}\n"
         )
+
     print("=" * 100)
