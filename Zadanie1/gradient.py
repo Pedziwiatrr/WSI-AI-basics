@@ -227,7 +227,7 @@ def generate_points(
 
 
 if __name__ == "__main__":
-    show_all_ex = False
+    show_all_ex = True
     values_test = False
     descent = True
 
@@ -236,7 +236,7 @@ if __name__ == "__main__":
     else:
         params = generate_test_params()
 
-    points = generate_points(True, min=descent)
+    points = generate_points(not show_all_ex, min=descent)
 
     print("=" * 100)
 
@@ -274,17 +274,18 @@ if __name__ == "__main__":
             print(f"Punkt końcowy: x = {args[0]}, y = {f(args[0])}")
 
     plt.show()
-    points = generate_points(True, [(-2, 2), (-2, 2)], descent, 3)
+    points = generate_points(not show_all_ex, [(-2, 2), (-2, 2)], descent, 3)
     print("=" * 100)
 
     if show_all_ex:
         for point in points:
+            print(point)
             args, total_time = grad_descent(
                 g,
                 g_derivative,
                 [(-2, 2), (-2, 2)],
                 params[0][0],
-                [point],
+                [point[0], point[1]],
                 params[0][1],
                 find_min=descent,
                 plot=True,
