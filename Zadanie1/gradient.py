@@ -111,7 +111,9 @@ def two_dimensions_chart(function, domain, path, gradient_params, time):
         color="blue",
     )
     plt.savefig(
-        "./Zadanie1/wykresy/gradient_wykres_2d.png", dpi=500, bbox_inches="tight"
+        f"./Zadanie1/wykresy/f_{gradient_params[0]}_{gradient_params[1]}.png",
+        dpi=500,
+        bbox_inches="tight",
     )
     plt.show()
 
@@ -159,7 +161,9 @@ def three_dimensions_chart(function, domain, path, gradient_params, time):
         color="blue",
     )
     plt.savefig(
-        "./Zadanie1/wykresy/gradient_wykres_3d.png", dpi=500, bbox_inches="tight"
+        f"./Zadanie1/wykresy/g_{gradient_params[0]}_{gradient_params[1]}.png",
+        dpi=500,
+        bbox_inches="tight",
     )
     plt.show()
 
@@ -192,7 +196,7 @@ if __name__ == "__main__":
             learning_rate,
             [random_x],
             max_step_count,
-            plot=False,
+            plot=True,
         )
 
         print(
