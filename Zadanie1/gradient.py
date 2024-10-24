@@ -33,7 +33,8 @@ def grad_descent(
 ):
     if find_min:
         learning_rate = -learning_rate
-        # domyślnie dążymy do minimum. Jeśli find_min = False, funkcja będzie dążyć do maksimum
+        # domyślnie dążymy do minimum (ponieważ algorytm to gradient descend).
+        # Jeśli find_min = False, funkcja będzie dążyć do maksimum
 
     path = [args]
 
@@ -43,7 +44,7 @@ def grad_descent(
             for i, variable in enumerate(args)
         ]
         # args - argumenty funkcji na których obecnie "jesteśmy"
-        # każdy z tych argumentów zmieniamy z osobna co każdy krok gradientu przesuwając się po wykresie
+        # każdy z tych argumentów zmieniamy z osobna co każdy krok gradientu "przesuwając się" po wykresie
 
         if all(domain[i][0] <= new_args[i] <= domain[i][1] for i in range(len(domain))):
             args = new_args
@@ -60,7 +61,7 @@ def grad_descent(
 
 
 def two_dimensions_chart(function, domain, path):
-    x_values = [x / 100 for x in range(int(domain[0] * 100), int(domain[1] * 100))]
+    x_values = np.linspace(domain[0], domain[1])
     y_values = [function(x) for x in x_values]
     plt.plot(
         x_values,
@@ -75,12 +76,12 @@ def two_dimensions_chart(function, domain, path):
         path_x,
         path_y,
         color="red",
-        linewidth=4,
+        linewidth=3,
         label="Ścieżka gradientu",
     )
 
     plt.scatter(
-        path_x[0], f(path_x[0]), color="green", s=75, label="Punkt startowy", zorder=2
+        path_x[0], f(path_x[0]), color="green", s=50, label="Punkt startowy", zorder=2
     )
 
     plt.legend()
@@ -110,16 +111,15 @@ def three_dimensions_chart(function, domain, path):
         path_y,
         path_z,
         color="red",
-        linewidth=5,
+        linewidth=3,
         label="Ścieżka gradientu",
-        alpha=0.5,
     )
     ax.scatter3D(
         path_x[0],
         path_y[0],
         path_z[0],
         color="green",
-        s=75,
+        s=50,
         label="Punkt startowy",
         zorder=2,
     )
@@ -137,11 +137,16 @@ def three_dimensions_chart(function, domain, path):
 if __name__ == "__main__":
     random_x = random.uniform(-4 * math.pi, 4 * math.pi)
     args = grad_descent(
-        f, f_derivative, [(-4 * math.pi, 4 * math.pi)], 0.01, [random_x], 1000
+        f, f_derivative, [(-4 * math.pi, 4 * math.pi)], 0.05, [random_x], 1000
     )
-    print(args)
+    print("Funkcja f(x)")
+    print(f"\nPunkt startowy: x = {random_x}, y = {f(random_x)}")
+    print(f"Punkt końcowy: x = {args[0]}, y = {f(args[0])}")
 
     random_x = random.uniform(-2, 2)
     random_y = random.uniform(-2, 2)
     args = grad_descent(g, g_derivative, [(-2, 2), (-2, 2)], 0.01, [random_x, random_y])
-    print(args)
+    print(
+        f"\nPunkt startowy: x = {random_x}, y = {random_y}, z = {g(random_x, random_y)}"
+    )
+    print(f"Punkt końcowy: x = {args[0]}, y = {args[1]}, z = {g(args[0], args[1])}\n")
