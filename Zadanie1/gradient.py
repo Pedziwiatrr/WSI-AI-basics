@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import time
 
+# autor: Michał Pędziwiatr
 # Nr indeksu: 331421 => A = 1, B = 2, C = 4
 # 1: f(x) = x + 2sin(x),    D = (-4pi, 4pi)
 # 2: g(x, y) = 4xy/e^(x^2 + y^2),   Dx = (-2, 2), Dy  (-2, 2)
@@ -111,7 +112,7 @@ def two_dimensions_chart(function, domain, path, gradient_params, time):
         color="blue",
     )
     plt.savefig(
-        f"./Zadanie1/wykresy/f_{gradient_params[0]}_{gradient_params[1]}.png",
+        f"./Zadanie1/wykresy/f/f_{gradient_params[0]}_{gradient_params[1]}.png",
         dpi=500,
         bbox_inches="tight",
     )
@@ -161,7 +162,7 @@ def three_dimensions_chart(function, domain, path, gradient_params, time):
         color="blue",
     )
     plt.savefig(
-        f"./Zadanie1/wykresy/g_{gradient_params[0]}_{gradient_params[1]}.png",
+        f"./Zadanie1/wykresy/g/g_{gradient_params[0]}_{gradient_params[1]}.png",
         dpi=500,
         bbox_inches="tight",
     )
@@ -181,6 +182,7 @@ def generate_test_params():
 if __name__ == "__main__":
     random_x = random.uniform(-4 * math.pi, 4 * math.pi)
     values_test = True
+    descend = False
 
     if not values_test:
         params = 0.05, 1000
@@ -196,6 +198,7 @@ if __name__ == "__main__":
             learning_rate,
             [random_x],
             max_step_count,
+            find_min=descend,
             plot=True,
         )
 
@@ -217,6 +220,7 @@ if __name__ == "__main__":
             learning_rate,
             [random_x, random_y],
             max_step_count,
+            find_min=descend,
             plot=True,
         )
         print(
