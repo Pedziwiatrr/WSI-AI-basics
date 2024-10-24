@@ -69,12 +69,15 @@ def grad_descent(
 
 
 def two_dimensions_chart(function, domain, path):
-    x_values = [x / 100 for x in range(int(domain[0] * 100), int(domain[1] * 100))]
+    x_values = [
+        x / 100 for x in range(int((domain[0] - 1) * 100), int((domain[1] + 1) * 100))
+    ]
     y_values = [function(x) for x in x_values]
     plt.plot(
         x_values,
         y_values,
-        label="Ścieżka algorytmu gradientu dla funkcji " + str(function),
+        label=function.__name__ + "(x)",
+        linestyle="--",
     )
 
     path_x = [position[0] for position in path]
@@ -82,8 +85,18 @@ def two_dimensions_chart(function, domain, path):
     plt.plot(
         path_x,
         path_y,
-        "ro",
-        label="Ścieżka algorytmu gradientu dla funkcji " + str(function),
+        color="red",
+        linewidth=4,
+        label="Ścieżka gradientu",
+    )
+
+    plt.scatter(
+        path_x[0], f(path_x[0]), color="green", s=75, label="Punkt startowy", zorder=2
+    )
+
+    plt.legend()
+    plt.savefig(
+        "./Zadanie1/wykresy/gradient_wykres_2d.png", dpi=500, bbox_inches="tight"
     )
     plt.show()
 
