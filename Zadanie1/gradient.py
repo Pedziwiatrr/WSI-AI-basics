@@ -1,6 +1,7 @@
 import math
 import random
 import matplotlib.pyplot as plt
+import numpy as np
 
 # Nr indeksu: 331421 => A = 1, B = 2, C = 4
 # 1: f(x) = x + 2sin(x),    D = (-4pi, 4pi)
@@ -10,33 +11,30 @@ import matplotlib.pyplot as plt
 def f(x):
     if -4 * math.pi < x < 4 * math.pi:
         return x + 2 * math.sin(x)
-    else:
-        return None
+    return None
 
 
 def f_derivative(x):
     if -4 * math.pi < x < 4 * math.pi:
         return (1 + 2 * math.cos(x),)
-    else:
-        return None
+    return None
 
 
 def g(x, y):
-    if -2 < x < 2 and -2 < y < 2:
-        return 4 * x * y / math.e ** (x**2 + y**2)
-    else:
-        return None
+    if np.all((-2 < x) & (x < 2) & (-2 < y) & (y < 2)):
+        # zapis wynikający z użycia meshgrid w funkcji tworzącej wykresy
+        return 4 * x * y / np.exp(x**2 + y**2)
+    return None
 
 
 def g_derivative(x, y):
-    if -2 < x < 2 and -2 < y < 2:
+    if np.all((-2 < x) & (x < 2) & (-2 < y) & (y < 2)):
         return (
-            (4 - 8 * x**2) * y * math.e ** ((-x) ** 2 - (y) ** 2),
-            (4 - 8 * y**2) * x * math.e ** ((-x) ** 2 - (y) ** 2),
+            (4 - 8 * x**2) * y * np.exp((-x) ** 2 - (y) ** 2),
+            (4 - 8 * y**2) * x * np.exp((-x) ** 2 - (y) ** 2),
         )
         # pochodne cząstkowe (∂x, ∂y)
-    else:
-        return None
+    return None
 
 
 def grad_descent(
@@ -63,15 +61,15 @@ def grad_descent(
         path.append(args)
 
     if len(args) == 1:
-        two_dimensions_chart(function, domain, path)
+        two_dimensions_chart(function, domain[0], path)
+    elif len(args) == 2:
+        three_dimensions_chart(function, domain, path)
 
     return args
 
 
 def two_dimensions_chart(function, domain, path):
-    x_values = [
-        x / 100 for x in range(int((domain[0] - 1) * 100), int((domain[1] + 1) * 100))
-    ]
+    x_values = [x / 100 for x in range(int(domain[0] * 100), int(domain[1] * 100))]
     y_values = [function(x) for x in x_values]
     plt.plot(
         x_values,
@@ -98,17 +96,42 @@ def two_dimensions_chart(function, domain, path):
     plt.savefig(
         "./Zadanie1/wykresy/gradient_wykres_2d.png", dpi=500, bbox_inches="tight"
     )
+    # plt.show()
+
+
+def three_dimensions_chart(function, domain, path):
+    fig = plt.figure()
+    ax = fig.add_subplot(projection="3d")
+
+    x_values = np.linspace(domain[0][0], domain[0][1])
+    y_values = np.linspace(domain[1][0], domain[1][1])
+
+    X, Y = np.meshgrid(x_values, y_values)
+    Z = function(X, Y)
+    ax.plot_surface(X, Y, Z, cmap=plt.cm.YlGnBu_r)
+
+    path_x = [position[0] for position in path]
+    path_y = [position[1] for position in path]
+    path_z = [function(x, y) for x, y in zip(path_x, path_y)]
+
+    ax.plot(path_x, path_y, path_z, color="red", linewidth=4, label="Ścieżka gradientu")
+
+    ax.set_xlabel("X")
+    ax.set_ylabel("Y")
+    ax.set_zlabel("Z")
+    ax.legend()
+
     plt.show()
 
 
 if __name__ == "__main__":
     random_x = random.uniform(-4 * math.pi, 4 * math.pi)
     args = grad_descent(
-        f, f_derivative, (-4 * math.pi, 4 * math.pi), 0.01, [random_x], 1000
+        f, f_derivative, [(-4 * math.pi, 4 * math.pi)], 0.01, [random_x], 1000
     )
     print(args)
 
     random_x = random.uniform(-2, 2)
     random_y = random.uniform(-2, 2)
-    args = grad_descent(g, g_derivative, (-2, 2), 0.01, [random_x, random_y])
+    args = grad_descent(g, g_derivative, [(-2, 2), (-2, 2)], 0.01, [random_x, random_y])
     print(args)
