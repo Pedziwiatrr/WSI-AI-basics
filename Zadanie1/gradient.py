@@ -22,14 +22,21 @@ def g(x, y):
 
 def g_derivative(x, y):
     return (
-        (4 - 8 * x**2) * y * np.exp((-x) ** 2 - (y) ** 2),
-        (4 - 8 * y**2) * x * np.exp((-x) ** 2 - (y) ** 2),
+        (4 - 8 * x**2) * y * np.exp(-(x**2) - (y) ** 2),
+        (4 - 8 * y**2) * x * np.exp(-(x**2) - (y) ** 2),
     )
     # pochodne cząstkowe (∂x, ∂y)
 
 
 def grad_descent(
-    function, derivative, domain, learning_rate, args, step_count=100, find_min=True
+    function,
+    derivative,
+    domain,
+    learning_rate,
+    args,
+    step_count=100,
+    find_min=True,
+    plot=True,
 ):
     if find_min:
         learning_rate = -learning_rate
@@ -51,11 +58,11 @@ def grad_descent(
             path.append(args)
         else:
             break
-
-    if len(args) == 1:
-        two_dimensions_chart(function, domain[0], path)
-    elif len(args) == 2:
-        three_dimensions_chart(function, domain, path)
+    if plot:
+        if len(args) == 1:
+            two_dimensions_chart(function, domain[0], path)
+        elif len(args) == 2:
+            three_dimensions_chart(function, domain, path)
 
     return args
 
@@ -88,7 +95,7 @@ def two_dimensions_chart(function, domain, path):
     plt.savefig(
         "./Zadanie1/wykresy/gradient_wykres_2d.png", dpi=500, bbox_inches="tight"
     )
-    # plt.show()
+    plt.show()
 
 
 def three_dimensions_chart(function, domain, path):
@@ -131,22 +138,64 @@ def three_dimensions_chart(function, domain, path):
     plt.savefig(
         "./Zadanie1/wykresy/gradient_wykres_3d.png", dpi=500, bbox_inches="tight"
     )
-    # plt.show()
+    plt.show()
+
+
+def generate_test_params():
+    learning_rates = [0.1, 0.01, 0.001]
+    max_step_counts = [100, 500, 1000]
+    test_params = []
+    for lr in learning_rates:
+        for msc in max_step_counts:
+            test_params.append((lr, msc))
+    return test_params
 
 
 if __name__ == "__main__":
     random_x = random.uniform(-4 * math.pi, 4 * math.pi)
-    args = grad_descent(
-        f, f_derivative, [(-4 * math.pi, 4 * math.pi)], 0.05, [random_x], 1000
-    )
-    print("Funkcja f(x)")
-    print(f"\nPunkt startowy: x = {random_x}, y = {f(random_x)}")
-    print(f"Punkt końcowy: x = {args[0]}, y = {f(args[0])}")
+    values_test = True
+    plot = True
+
+    if not values_test:
+        params = 0.05, 1000
+    else:
+        params = generate_test_params()
+
+    for learning_rate, max_step_count in params:
+        args = grad_descent(
+            f,
+            f_derivative,
+            [(-4 * math.pi, 4 * math.pi)],
+            learning_rate,
+            [random_x],
+            max_step_count,
+            plot,
+        )
+
+        print(
+            f"\nFunkcja f(x) : długość kroku: {learning_rate}, ilość kroków: {max_step_count}"
+        )
+        print(f"Punkt startowy: x = {random_x}, y = {f(random_x)}")
+        print(f"Punkt końcowy: x = {args[0]}, y = {f(args[0])}")
 
     random_x = random.uniform(-2, 2)
     random_y = random.uniform(-2, 2)
-    args = grad_descent(g, g_derivative, [(-2, 2), (-2, 2)], 0.01, [random_x, random_y])
-    print(
-        f"\nPunkt startowy: x = {random_x}, y = {random_y}, z = {g(random_x, random_y)}"
-    )
-    print(f"Punkt końcowy: x = {args[0]}, y = {args[1]}, z = {g(args[0], args[1])}\n")
+
+    for learning_rate, max_step_count in params:
+        args = grad_descent(
+            g,
+            g_derivative,
+            [(-2, 2), (-2, 2)],
+            learning_rate,
+            [random_x, random_y],
+            max_step_count,
+        )
+        print(
+            f"\nFunkcja g(x,y) : długość kroku: {learning_rate}, ilość kroków: {max_step_count}"
+        )
+        print(
+            f"\nPunkt startowy: x = {random_x}, y = {random_y}, z = {g(random_x, random_y)}"
+        )
+        print(
+            f"Punkt końcowy: x = {args[0]}, y = {args[1]}, z = {g(args[0], args[1])}\n"
+        )
