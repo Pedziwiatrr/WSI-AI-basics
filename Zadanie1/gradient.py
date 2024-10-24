@@ -107,7 +107,7 @@ def two_dimensions_chart(function, domain, path, gradient_params, time):
     plt.xlabel("X")
     plt.ylabel("Y")
     plt.suptitle(
-        f"{function.__name__}(x) / współczynnik długości kroku = {gradient_params[0]}, ilość kroków = {gradient_params[1]},\n czas = {time:.6f}s",
+        f"{function.__name__}(x) / współczynnik długości kroku = {gradient_params[0]}, max ilość kroków = {gradient_params[1]},\n czas = {time:.6f}s",
         fontsize=12,
         color="blue",
     )
@@ -157,7 +157,7 @@ def three_dimensions_chart(function, domain, path, gradient_params, time):
     ax.set_zlabel("Z")
     ax.legend()
     plt.suptitle(
-        f"{function.__name__}(x) / współczynnik długości kroku = {gradient_params[0]}, ilość kroków = {gradient_params[1]},\n czas = {time:.6f}s",
+        f"{function.__name__}(x, y) / współczynnik długości kroku = {gradient_params[0]}, max ilość kroków = {gradient_params[1]},\n czas = {time:.6f}s",
         fontsize=12,
         color="blue",
     )
@@ -170,8 +170,8 @@ def three_dimensions_chart(function, domain, path, gradient_params, time):
 
 
 def generate_test_params():
-    learning_rates = [0.1, 0.01, 0.001]
-    max_step_counts = [100, 500, 1000]
+    learning_rates = [0.1, 0.05, 0.001]
+    max_step_counts = [10, 100, 500, 1000, 5000]
     test_params = []
     for lr in learning_rates:
         for msc in max_step_counts:
@@ -182,7 +182,7 @@ def generate_test_params():
 if __name__ == "__main__":
     random_x = random.uniform(-4 * math.pi, 4 * math.pi)
     values_test = True
-    descend = False
+    descent = True
 
     if not values_test:
         params = 0.05, 1000
@@ -198,12 +198,12 @@ if __name__ == "__main__":
             learning_rate,
             [random_x],
             max_step_count,
-            find_min=descend,
+            find_min=descent,
             plot=True,
         )
 
         print(
-            f"\nFunkcja f(x) : współczynnik długości kroku: {learning_rate}, ilość kroków: {max_step_count}, czas: {total_time:.6f}s"
+            f"\nFunkcja f(x) : współczynnik długości kroku: {learning_rate}, max ilość kroków: {max_step_count}, czas: {total_time:.6f}s"
         )
         print(f"Punkt startowy: x = {random_x}, y = {f(random_x)}")
         print(f"Punkt końcowy: x = {args[0]}, y = {f(args[0])}")
@@ -220,11 +220,11 @@ if __name__ == "__main__":
             learning_rate,
             [random_x, random_y],
             max_step_count,
-            find_min=descend,
+            find_min=descent,
             plot=True,
         )
         print(
-            f"\nFunkcja g(x,y) : długość kroku: {learning_rate}, ilość kroków: {max_step_count}, czas: {total_time:.6f}s"
+            f"\nFunkcja g(x,y) : długość kroku: {learning_rate}, max ilość kroków: {max_step_count}, czas: {total_time:.6f}s"
         )
         print(
             f"Punkt startowy: x = {random_x}, y = {random_y}, z = {g(random_x, random_y)}"
