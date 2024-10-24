@@ -39,6 +39,7 @@ def grad_descent(
     step_count=500,
     find_min=True,
     plot=True,
+    all_ex=False,
 ):
     if find_min:
         learning_rate = -learning_rate
@@ -69,17 +70,22 @@ def grad_descent(
     if plot:
         if len(args) == 1:
             two_dimensions_chart(
-                function, domain[0], path, (learning_rate, step_count), total_time
+                function,
+                domain[0],
+                path,
+                (learning_rate, step_count),
+                total_time,
+                all_ex,
             )
         elif len(args) == 2:
             three_dimensions_chart(
-                function, domain, path, (learning_rate, step_count), total_time
+                function, domain, path, (learning_rate, step_count), total_time, all_ex
             )
 
     return (args, total_time)
 
 
-def two_dimensions_chart(function, domain, path, gradient_params, time):
+def two_dimensions_chart(function, domain, path, gradient_params, time, all_ex):
     x_values = np.linspace(domain[0], domain[1])
     y_values = [function(x) for x in x_values]
     plt.plot(
@@ -103,7 +109,8 @@ def two_dimensions_chart(function, domain, path, gradient_params, time):
         path_x[0], f(path_x[0]), color="green", s=50, label="Punkt startowy", zorder=2
     )
 
-    plt.legend()
+    if not all_ex:
+        plt.legend()
     plt.xlabel("X")
     plt.ylabel("Y")
     plt.suptitle(
@@ -119,7 +126,7 @@ def two_dimensions_chart(function, domain, path, gradient_params, time):
     # plt.show()
 
 
-def three_dimensions_chart(function, domain, path, gradient_params, time):
+def three_dimensions_chart(function, domain, path, gradient_params, time, all_ex):
     fig = plt.figure()
     ax = fig.add_subplot(projection="3d")
 
@@ -155,7 +162,8 @@ def three_dimensions_chart(function, domain, path, gradient_params, time):
     ax.set_xlabel("X")
     ax.set_ylabel("Y")
     ax.set_zlabel("Z")
-    ax.legend()
+    if not all_ex:
+        ax.legend()
     plt.suptitle(
         f"{function.__name__}(x, y) / współczynnik długości kroku = {gradient_params[0]}, max ilość kroków = {gradient_params[1]},\n czas = {time:.6f}s",
         fontsize=12,
@@ -189,24 +197,22 @@ def generate_points(
         if min:
             if dim == 2:
                 points = [
-                    -4 * math.pi,
-                    -8 / 3 * math.pi,
-                    -2 / 3 * math.pi,
-                    4 / 3 * math.pi,
-                    10 / 3 * math.pi,
-                    4 * math.pi,
+                    -3.5 * math.pi,
+                    -7 / 3 * math.pi,
+                    0,
+                    5 / 6 * math.pi,
+                    11 / 3 * math.pi,
                 ]
             elif dim == 3:
                 points = [(0.7, -0.7), (-0.7, 0.7)]
         elif not min:
             if dim == 2:
                 points = [
-                    4 * math.pi,
-                    8 / 3 * math.pi,
-                    2 / 3 * math.pi,
-                    -4 / 3 * math.pi,
-                    -10 / 3 * math.pi,
-                    -4 * math.pi,
+                    3.5 * math.pi,
+                    5 / 3 * math.pi,
+                    0,
+                    -math.pi,
+                    -9 / 3 * math.pi,
                 ]
             elif dim == 3:
                 points = [(-0.7, -0.7), (0.7, 0.7)]
@@ -218,7 +224,7 @@ def generate_points(
 
 
 if __name__ == "__main__":
-
+    show_all_ex = False
     values_test = False
     descent = True
 
@@ -227,51 +233,84 @@ if __name__ == "__main__":
     else:
         params = generate_test_params()
 
-    points = generate_points(True)
+    points = generate_points(False, min=descent)
 
     print("=" * 100)
 
-    for learning_rate, max_step_count in params:
-        args, total_time = grad_descent(
-            f,
-            f_derivative,
-            [(-4 * math.pi, 4 * math.pi)],
-            learning_rate,
-            [-8 / 3 * math.pi],
-            max_step_count,
-            find_min=descent,
-            plot=True,
-        )
+    if show_all_ex:
+        for point in points:
+            args, total_time = grad_descent(
+                f,
+                f_derivative,
+                [(-4 * math.pi, 4 * math.pi)],
+                params[0][0],
+                [point],
+                params[0][1],
+                find_min=descent,
+                plot=True,
+                all_ex=True,
+            )
+            print(f"Punkt końcowy: x = {args[0]}, y = {f(args[0])}")
+    else:
+        for learning_rate, max_step_count in params:
+            args, total_time = grad_descent(
+                f,
+                f_derivative,
+                [(-4 * math.pi, 4 * math.pi)],
+                learning_rate,
+                [-8 / 3 * math.pi],
+                max_step_count,
+                find_min=descent,
+                plot=True,
+            )
 
-        print(
-            f"\nFunkcja f(x) : współczynnik długości kroku: {learning_rate}, max ilość kroków: {max_step_count}, czas: {total_time:.6f}s"
-        )
-        print(f"Punkt startowy: x = {points[0]}, y = {f(points[0])}")
-        print(f"Punkt końcowy: x = {args[0]}, y = {f(args[0])}")
+            print(
+                f"\nFunkcja f(x) : współczynnik długości kroku: {learning_rate}, max ilość kroków: {max_step_count}, czas: {total_time:.6f}s"
+            )
+            print(f"Punkt startowy: x = {points[0]}, y = {f(points[0])}")
+            print(f"Punkt końcowy: x = {args[0]}, y = {f(args[0])}")
 
-    points = generate_points(True, [(-2, 2), (-2, 2)], True, 3)
+    plt.show()
+    points = generate_points(False, [(-2, 2), (-2, 2)], descent, 3)
     print("=" * 100)
-    # plt.show()
 
-    for learning_rate, max_step_count in params:
-        args, total_time = grad_descent(
-            g,
-            g_derivative,
-            [(-2, 2), (-2, 2)],
-            learning_rate,
-            [points[0], points[1]],
-            max_step_count,
-            find_min=descent,
-            plot=False,
-        )
-        print(
-            f"\nFunkcja g(x,y) : długość kroku: {learning_rate}, max ilość kroków: {max_step_count}, czas: {total_time:.6f}s"
-        )
-        print(
-            f"Punkt startowy: x = {points[0]}, y = {points[1]}, z = {g(points[0], points[1])}"
-        )
-        print(
-            f"Punkt końcowy: x = {args[0]}, y = {args[1]}, z = {g(args[0], args[1])}\n"
-        )
+    if show_all_ex:
+        for point in points:
+            args, total_time = grad_descent(
+                g,
+                g_derivative,
+                [(-2, 2), (-2, 2)],
+                params[0][0],
+                [point],
+                params[0][1],
+                find_min=descent,
+                plot=True,
+                all_ex=True,
+            )
+            print(
+                f"Punkt końcowy: x = {args[0]}, y = {args[1]}, z = {g(args[0], args[1])}\n"
+            )
+    else:
+        for learning_rate, max_step_count in params:
+            args, total_time = grad_descent(
+                g,
+                g_derivative,
+                [(-2, 2), (-2, 2)],
+                learning_rate,
+                [points[0][0], points[0][1]],
+                max_step_count,
+                find_min=descent,
+                plot=True,
+            )
+            print(
+                f"\nFunkcja g(x,y) : długość kroku: {learning_rate}, max ilość kroków: {max_step_count}, czas: {total_time:.6f}s"
+            )
+            print(
+                f"Punkt startowy: x = {points[0]}, y = {points[1]}, z = {g(points[0][0], points[0][1])}"
+            )
+            print(
+                f"Punkt końcowy: x = {args[0]}, y = {args[1]}, z = {g(args[0], args[1])}\n"
+            )
 
     print("=" * 100)
+    plt.show()
