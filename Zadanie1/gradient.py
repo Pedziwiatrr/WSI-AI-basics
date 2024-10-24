@@ -9,32 +9,23 @@ import numpy as np
 
 
 def f(x):
-    if -4 * math.pi < x < 4 * math.pi:
-        return x + 2 * math.sin(x)
-    return None
+    return x + 2 * math.sin(x)
 
 
 def f_derivative(x):
-    if -4 * math.pi < x < 4 * math.pi:
-        return (1 + 2 * math.cos(x),)
-    return None
+    return (1 + 2 * math.cos(x),)
 
 
 def g(x, y):
-    if np.all((-2 < x) & (x < 2) & (-2 < y) & (y < 2)):
-        # zapis wynikający z użycia meshgrid w funkcji tworzącej wykresy
-        return 4 * x * y / np.exp(x**2 + y**2)
-    return None
+    return 4 * x * y / np.exp(x**2 + y**2)
 
 
 def g_derivative(x, y):
-    if np.all((-2 < x) & (x < 2) & (-2 < y) & (y < 2)):
-        return (
-            (4 - 8 * x**2) * y * np.exp((-x) ** 2 - (y) ** 2),
-            (4 - 8 * y**2) * x * np.exp((-x) ** 2 - (y) ** 2),
-        )
-        # pochodne cząstkowe (∂x, ∂y)
-    return None
+    return (
+        (4 - 8 * x**2) * y * np.exp((-x) ** 2 - (y) ** 2),
+        (4 - 8 * y**2) * x * np.exp((-x) ** 2 - (y) ** 2),
+    )
+    # pochodne cząstkowe (∂x, ∂y)
 
 
 def grad_descent(
@@ -47,18 +38,18 @@ def grad_descent(
     path = [args]
 
     for i in range(step_count):
-        try:
-            new_args = [
-                variable + learning_rate * derivative(*args)[i]
-                for i, variable in enumerate(args)
-            ]
-            # args - argumenty funkcji na których obecnie "jesteśmy"
-            # każdy z tych argumentów zmieniamy z osobna co każdy krok gradientu przesuwając się po wykresie
-        except TypeError:
+        new_args = [
+            variable + learning_rate * derivative(*args)[i]
+            for i, variable in enumerate(args)
+        ]
+        # args - argumenty funkcji na których obecnie "jesteśmy"
+        # każdy z tych argumentów zmieniamy z osobna co każdy krok gradientu przesuwając się po wykresie
+
+        if all(domain[i][0] <= new_args[i] <= domain[i][1] for i in range(len(domain))):
+            args = new_args
+            path.append(args)
+        else:
             break
-            # TypeError oznacza wyjście poza dziedzinę (None jako wartość funkcji derivative)
-        args = new_args
-        path.append(args)
 
     if len(args) == 1:
         two_dimensions_chart(function, domain[0], path)
@@ -114,7 +105,7 @@ def three_dimensions_chart(function, domain, path):
     path_y = [position[1] for position in path]
     path_z = [function(x, y) for x, y in zip(path_x, path_y)]
 
-    ax.plot(path_x, path_y, path_z, color="red", linewidth=4, label="Ścieżka gradientu")
+    ax.plot(path_x, path_y, path_z, color="red", linewidth=5, label="Ścieżka gradientu")
 
     ax.set_xlabel("X")
     ax.set_ylabel("Y")
