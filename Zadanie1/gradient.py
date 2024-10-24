@@ -60,14 +60,14 @@ def grad_descent(
             break
     if plot:
         if len(args) == 1:
-            two_dimensions_chart(function, domain[0], path)
+            two_dimensions_chart(function, domain[0], path, (learning_rate, step_count))
         elif len(args) == 2:
-            three_dimensions_chart(function, domain, path)
+            three_dimensions_chart(function, domain, path, (learning_rate, step_count))
 
     return args
 
 
-def two_dimensions_chart(function, domain, path):
+def two_dimensions_chart(function, domain, path, gradient_params):
     x_values = np.linspace(domain[0], domain[1])
     y_values = [function(x) for x in x_values]
     plt.plot(
@@ -92,13 +92,18 @@ def two_dimensions_chart(function, domain, path):
     )
 
     plt.legend()
+    plt.suptitle(
+        f"{function.__name__}(x) / współczynnik długości kroku = {gradient_params[0]}, ilość kroków = {gradient_params[1]}",
+        fontsize=12,
+        color="blue",
+    )
     plt.savefig(
         "./Zadanie1/wykresy/gradient_wykres_2d.png", dpi=500, bbox_inches="tight"
     )
     plt.show()
 
 
-def three_dimensions_chart(function, domain, path):
+def three_dimensions_chart(function, domain, path, gradient_params):
     fig = plt.figure()
     ax = fig.add_subplot(projection="3d")
 
@@ -173,7 +178,7 @@ if __name__ == "__main__":
         )
 
         print(
-            f"\nFunkcja f(x) : długość kroku: {learning_rate}, ilość kroków: {max_step_count}"
+            f"\nFunkcja f(x) : współczynnik długości kroku: {learning_rate}, ilość kroków: {max_step_count}"
         )
         print(f"Punkt startowy: x = {random_x}, y = {f(random_x)}")
         print(f"Punkt końcowy: x = {args[0]}, y = {f(args[0])}")
