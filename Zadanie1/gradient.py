@@ -239,11 +239,11 @@ def generate_points(
 
 if __name__ == "__main__":
     # zmienna decydująca o tym czy punkty będą losowane czy ustawiane ręcznie.
-    set_points = True
+    set_points = False
 
     # zmienna decydująca o tym czy algorytm zostanie wykonany wiele razy dla różnych parametrów.
     # Nie wpływa na działanie funkcji jeśli set_points = True.
-    values_test = True
+    values_test = False
 
     # zmienna decydująca o tym czy algorytm poszukiwać będzie minimum (descent = true) czy maksimum (descent = false (ascent))
     descent = True
