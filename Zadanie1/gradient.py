@@ -45,9 +45,9 @@ def grad_descent(
     Argumenty:
     function - funkcja na której chcemy przeprowadzić optymalizację,
     derivative - pochodna tej funkcji,
-    domain - dziedzina funkcji,
+    domain - dziedzina funkcji (lista krotek),
     learning_rate - współczynnik długości kroku,
-    args - argumenty funkcji w obecnym miejscu,
+    args - argumenty funkcji w obecnym miejscu (przy wywołaniu, są to argumenty punktu startowego),
     step_count - maksymalna ilość iteracji (kroków) jaką wykona algorytm,
     find_min - zmienna typu bool, decydująca czy algorytm szukać będzie minimum czy maksimum,
 
