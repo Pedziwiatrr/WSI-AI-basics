@@ -222,7 +222,7 @@ def generate_points(
                     -9 / 3 * math.pi,
                 ]
             elif dim == 3:
-                points = [(-0.5, -0.8), (1.5, 0.9)]
+                points = [(-0.5, -1.8), (1.5, 0.9)]
     else:
         random_x = random.uniform(domain[0][0], domain[0][1])
         if dim == 3:
@@ -234,7 +234,7 @@ def generate_points(
 
 
 if __name__ == "__main__":
-    show_all_ex = True
+    show_all_ex = False
     values_test = False
     descent = True
 
@@ -280,7 +280,6 @@ if __name__ == "__main__":
             print(f"Punkt startowy: x = {points[0]}, y = {f(points[0])}")
             print(f"Punkt końcowy: x = {args[0]}, y = {f(args[0])}")
 
-    plt.show()
     points = generate_points(not show_all_ex, [(-2, 2), (-2, 2)], descent, 3)
     print("=" * 100)
 
@@ -320,11 +319,10 @@ if __name__ == "__main__":
                 f"\nFunkcja g(x,y) : długość kroku: {learning_rate}, max ilość kroków: {max_step_count}, czas: {total_time:.6f}s"
             )
             print(
-                f"Punkt startowy: x = {points[0]}, y = {points[1]}, z = {g(points[0][0], points[0][1])}"
+                f"Punkt startowy: x = {points[0][0]}, y = {points[0][1]}, z = {g(points[0][0], points[0][1])}"
             )
             print(
                 f"Punkt końcowy: x = {args[0]}, y = {args[1]}, z = {g(args[0], args[1])}"
             )
 
     print("=" * 100)
-    plt.show()
