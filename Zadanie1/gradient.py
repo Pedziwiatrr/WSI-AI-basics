@@ -42,10 +42,25 @@ def grad_descent(
     all_ex=False,
     ax=None,
 ):
+    """
+    Funkcja implementująca algorytm gradientu prostego
+
+    Argumenty:
+    function - funkcja na której chcemy przeprowadzić optymalizację,
+    derivative - pochodna tej funkcji,
+    domain - dziedzina funkcji,
+    learning_rate - współczynnik długości kroku,
+    args - argumenty funkcji w obecnym miejscu,
+    step_count - maksymalna ilość iteracji (kroków) jaką wykona algorytm,
+    find_min - zmienna typu bool, decydująca czy algorytm szukać będzie minimum czy maksimum,
+    plot - bool, decydujący o stworzeniu wykresu ścieżki gradientu,
+    all_ex - bool, pozwalający na wyświetlenie wszystkich ekstremów jednocześnie,
+    ax - oś, potrzebna gdy chcemy wyświetlić wszystkie ekstrema jednocześnie na wykresie funkcji dwóch zmiennych (3D).
+
+    """
+
     if find_min:
         learning_rate = -learning_rate
-        # domyślnie dążymy do minimum (ponieważ algorytm to gradient descent).
-        # Jeśli find_min = False, funkcja będzie dążyć do maksimum
 
     path = [args]
     start_time = time.time()
@@ -90,6 +105,9 @@ def grad_descent(
 
 
 def two_dimensions_chart(function, domain, path, gradient_params, time, all_ex):
+    """
+    Funkcja tworząca wykresy dla funkcji jednej zmiennej (2-wymiarowe)
+    """
     x_values = np.linspace(domain[0], domain[1])
     y_values = [function(x) for x in x_values]
     plt.plot(
@@ -134,6 +152,9 @@ def two_dimensions_chart(function, domain, path, gradient_params, time, all_ex):
 def three_dimensions_chart(
     function, domain, path, gradient_params, time, all_ex, ax=None
 ):
+    """
+    Funkcja tworząca wykresy dla funkcji dwóch zmiennych (3-wymiarowe)
+    """
     if not ax:
         fig = plt.figure()
         ax = fig.add_subplot(projection="3d")
@@ -201,6 +222,11 @@ def generate_test_params():
 def generate_points(
     random_points=True, domain=[(-4 * math.pi, 4 * math.pi)], min=True, dim=2
 ):
+    """
+    Funkcja generująca punkty startowe dla grad_descent.
+    Domyślnie są one wybierane losowo, lecz istnieje opcja zdefiniowania ich współrzędnych.
+
+    """
     points = []
     if not random_points:
         if min:
@@ -288,7 +314,6 @@ if __name__ == "__main__":
     if show_all_ex:
         fig = plt.figure()
         ax = fig.add_subplot(projection="3d")
-        # tworzymy wykres by nie resetował się co iteracje
         for point in points:
             args, total_time = grad_descent(
                 g,
