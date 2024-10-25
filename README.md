@@ -1,4 +1,4 @@
-# WSI
+# WSI - laboratoria
 
 **Michał Pędziwiatr**
 
