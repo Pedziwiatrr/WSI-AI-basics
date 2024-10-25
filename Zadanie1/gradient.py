@@ -38,9 +38,6 @@ def grad_descent(
     args,
     step_count=500,
     find_min=True,
-    plot=True,
-    all_ex=False,
-    ax=None,
 ):
     """
     Funkcja implementująca algorytm gradientu prostego
@@ -53,9 +50,6 @@ def grad_descent(
     args - argumenty funkcji w obecnym miejscu,
     step_count - maksymalna ilość iteracji (kroków) jaką wykona algorytm,
     find_min - zmienna typu bool, decydująca czy algorytm szukać będzie minimum czy maksimum,
-    plot - bool, decydujący o stworzeniu wykresu ścieżki gradientu,
-    all_ex - bool, pozwalający na wyświetlenie wszystkich ekstremów jednocześnie,
-    ax - oś, potrzebna gdy chcemy wyświetlić wszystkie ekstrema jednocześnie na wykresie funkcji dwóch zmiennych (3D).
 
     """
 
@@ -80,31 +74,10 @@ def grad_descent(
     finish_time = time.time()
     total_time = finish_time - start_time
 
-    if plot:
-        if len(args) == 1:
-            two_dimensions_chart(
-                function,
-                domain[0],
-                path,
-                (learning_rate, step_count),
-                total_time,
-                all_ex,
-            )
-        elif len(args) == 2:
-            three_dimensions_chart(
-                function,
-                domain,
-                path,
-                (learning_rate, step_count),
-                total_time,
-                all_ex,
-                ax,
-            )
-
-    return (args, total_time)
+    return (args, total_time, path)
 
 
-def two_dimensions_chart(function, domain, path, gradient_params, time, all_ex):
+def two_dimensions_chart(function, domain, path, gradient_params, time, mul_points):
     """
     Funkcja tworząca wykresy dla funkcji jednej zmiennej (2-wymiarowe)
     """
@@ -138,19 +111,19 @@ def two_dimensions_chart(function, domain, path, gradient_params, time, all_ex):
         fontsize=12,
         color="blue",
     )
-    if not all_ex:
+    if not mul_points:
         plt.legend()
     plt.savefig(
         f"./Zadanie1/wykresy/f/f_{gradient_params[0]}_{gradient_params[1]}.png",
         dpi=500,
         bbox_inches="tight",
     )
-    if not all_ex:
+    if not mul_points:
         plt.show()
 
 
 def three_dimensions_chart(
-    function, domain, path, gradient_params, time, all_ex, ax=None
+    function, domain, path, gradient_params, time, mul_points, ax=None
 ):
     """
     Funkcja tworząca wykresy dla funkcji dwóch zmiennych (3-wymiarowe)
@@ -196,14 +169,14 @@ def three_dimensions_chart(
         fontsize=12,
         color="blue",
     )
-    if not all_ex:
+    if not mul_points:
         plt.legend()
     plt.savefig(
         f"./Zadanie1/wykresy/g/g_{gradient_params[0]}_{gradient_params[1]}.png",
         dpi=500,
         bbox_inches="tight",
     )
-    if not all_ex:
+    if not mul_points:
         plt.show()
 
 
@@ -225,6 +198,7 @@ def generate_points(
     """
     Funkcja generująca punkty startowe dla grad_descent.
     Domyślnie są one wybierane losowo, lecz istnieje opcja zdefiniowania ich współrzędnych.
+    Funkcja pozwala na ustawienie innych wartości przy szukaniu minimum oraz innych przy szukaniu maksimum.
 
     """
     points = []
@@ -262,8 +236,13 @@ def generate_points(
 
 
 if __name__ == "__main__":
-    show_all_ex = False
-    values_test = True
+    # zmienna decydująca o tym czy punkty będą losowane czy ustawiane ręcznie.
+    set_points = True
+
+    # zmienna decydująca o tym czy algorytm zostanie wykonany wiele razy dla różnych parametrów.
+    values_test = False
+
+    # zmienna decydująca o tym czy algorytm poszukiwać będzie minimum (descent = true) czy maksimum (descent = false (ascent))
     descent = True
 
     if not values_test:
@@ -271,13 +250,14 @@ if __name__ == "__main__":
     else:
         params = generate_test_params()
 
-    points = generate_points(not show_all_ex, min=descent)
+    points = generate_points(not set_points, min=descent)
 
     print("=" * 100)
 
-    if show_all_ex:
+    if set_points:
+        # Takie same parametry, wiele punktów
         for point in points:
-            args, total_time = grad_descent(
+            args, total_time, path = grad_descent(
                 f,
                 f_derivative,
                 [(-4 * math.pi, 4 * math.pi)],
@@ -285,13 +265,20 @@ if __name__ == "__main__":
                 [point],
                 params[0][1],
                 find_min=descent,
-                plot=True,
-                all_ex=True,
+            )
+            two_dimensions_chart(
+                f,
+                (-4 * math.pi, 4 * math.pi),
+                path,
+                (params[0][0], params[0][1]),
+                total_time,
+                set_points,
             )
             print(f"Punkt końcowy: x = {args[0]}, y = {f(args[0])}")
     else:
+        # Taki sam punkt, wiele par parametrów
         for learning_rate, max_step_count in params:
-            args, total_time = grad_descent(
+            args, total_time, path = grad_descent(
                 f,
                 f_derivative,
                 [(-4 * math.pi, 4 * math.pi)],
@@ -299,7 +286,14 @@ if __name__ == "__main__":
                 [points[0]],
                 max_step_count,
                 find_min=descent,
-                plot=True,
+            )
+            two_dimensions_chart(
+                f,
+                (-4 * math.pi, 4 * math.pi),
+                path,
+                (learning_rate, max_step_count),
+                total_time,
+                set_points,
             )
 
             print(
@@ -308,14 +302,17 @@ if __name__ == "__main__":
             print(f"Punkt startowy: x = {points[0]}, y = {f(points[0])}")
             print(f"Punkt końcowy: x = {args[0]}, y = {f(args[0])}")
 
-    points = generate_points(not show_all_ex, [(-2, 2), (-2, 2)], descent, 3)
+    if set_points:
+        plt.show()
+    points = generate_points(not set_points, [(-2, 2), (-2, 2)], descent, 3)
     print("=" * 100)
 
-    if show_all_ex:
+    if set_points:
+        # Takie same parametry, wiele punktów
         fig = plt.figure()
-        ax = fig.add_subplot(projection="3d")
+        plot_ax = fig.add_subplot(projection="3d")
         for point in points:
-            args, total_time = grad_descent(
+            args, total_time, path = grad_descent(
                 g,
                 g_derivative,
                 [(-2, 2), (-2, 2)],
@@ -323,16 +320,23 @@ if __name__ == "__main__":
                 [point[0], point[1]],
                 params[0][1],
                 find_min=descent,
-                plot=True,
-                all_ex=True,
-                ax=ax,
+            )
+            three_dimensions_chart(
+                g,
+                [(-2, 2), (-2, 2)],
+                path,
+                (params[0][0], params[0][1]),
+                total_time,
+                mul_points=True,
+                ax=plot_ax,
             )
             print(
                 f"Punkt końcowy: x = {args[0]}, y = {args[1]}, z = {g(args[0], args[1])}"
             )
     else:
+        # Taki sam punkt, wiele par parametrów
         for learning_rate, max_step_count in params:
-            args, total_time = grad_descent(
+            args, total_time, path = grad_descent(
                 g,
                 g_derivative,
                 [(-2, 2), (-2, 2)],
@@ -340,7 +344,14 @@ if __name__ == "__main__":
                 [points[0][0], points[0][1]],
                 max_step_count,
                 find_min=descent,
-                plot=True,
+            )
+            three_dimensions_chart(
+                g,
+                [(-2, 2), (-2, 2)],
+                path,
+                (learning_rate, max_step_count),
+                total_time,
+                mul_points=False,
             )
             print(
                 f"\nFunkcja g(x,y) : długość kroku: {learning_rate}, max ilość kroków: {max_step_count}, czas: {total_time:.6f}s"
@@ -351,5 +362,7 @@ if __name__ == "__main__":
             print(
                 f"Punkt końcowy: x = {args[0]}, y = {args[1]}, z = {g(args[0], args[1])}"
             )
+    if set_points:
+        plt.show()
 
     print("=" * 100)
