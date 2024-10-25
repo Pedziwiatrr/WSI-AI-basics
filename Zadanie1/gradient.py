@@ -203,6 +203,8 @@ def generate_points(
     """
     points = []
     if not random_points:
+        # argumenty zostały wybrane tak by każde ekstremum zostało znalezione przez algorytm,
+        # można je zmienić według upodobań.
         if min:
             if dim == 2:
                 points = [
@@ -237,15 +239,16 @@ def generate_points(
 
 if __name__ == "__main__":
     # zmienna decydująca o tym czy punkty będą losowane czy ustawiane ręcznie.
-    set_points = False
+    set_points = True
 
     # zmienna decydująca o tym czy algorytm zostanie wykonany wiele razy dla różnych parametrów.
+    # Nie wpływa na działanie funkcji jeśli set_points = True.
     values_test = True
 
     # zmienna decydująca o tym czy algorytm poszukiwać będzie minimum (descent = true) czy maksimum (descent = false (ascent))
     descent = True
 
-    if not values_test:
+    if not values_test or set_points:
         params = [(0.001, 5000)]
     else:
         params = generate_test_params()
