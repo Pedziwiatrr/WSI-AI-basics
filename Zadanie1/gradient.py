@@ -122,12 +122,13 @@ def two_dimensions_chart(function, domain, path, gradient_params, time, all_ex):
     )
     if not all_ex:
         plt.legend()
-        plt.show()
     plt.savefig(
         f"./Zadanie1/wykresy/f/f_{gradient_params[0]}_{gradient_params[1]}.png",
         dpi=500,
         bbox_inches="tight",
     )
+    if not all_ex:
+        plt.show()
 
 
 def three_dimensions_chart(
@@ -176,12 +177,13 @@ def three_dimensions_chart(
     )
     if not all_ex:
         plt.legend()
-        plt.show()
     plt.savefig(
         f"./Zadanie1/wykresy/g/g_{gradient_params[0]}_{gradient_params[1]}.png",
         dpi=500,
         bbox_inches="tight",
     )
+    if not all_ex:
+        plt.show()
 
 
 def generate_test_params():
