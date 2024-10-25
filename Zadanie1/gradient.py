@@ -209,7 +209,7 @@ def three_dimensions_chart(
 
 def generate_test_params():
     learning_rates = [0.1, 0.05, 0.001]
-    max_step_counts = [10, 100, 500, 1000, 5000]
+    max_step_counts = [25, 1000, 5000]
     test_params = []
 
     for lr in learning_rates:
@@ -263,7 +263,7 @@ def generate_points(
 
 if __name__ == "__main__":
     show_all_ex = False
-    values_test = False
+    values_test = True
     descent = True
 
     if not values_test:
