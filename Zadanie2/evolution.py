@@ -46,9 +46,7 @@ def select_solutions(cities_matrix, population):
         total_fitness_score += fitness_score
         scores.append(fitness_score)
 
-    selection_chance = []
-    for score in scores:
-        selection_chance.append(score / total_fitness_score)
+    selection_chance = [score / total_fitness_score for score in scores]
 
     selected = np.random.choice(population, POPULATION_SIZE * CROSSOVER_PROBABILITY, p=selection_chance)
 
