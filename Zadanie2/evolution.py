@@ -2,6 +2,7 @@ import numpy as np
 
 
 def decode_solution(cities_matrix, solution):
+    # return cities names using their indexes in solution
     return list(map(lambda city_id: cities_matrix.index[city_id], solution))
 
 
@@ -22,3 +23,10 @@ def evaluate_solution(cities_matrix, solution):
 
 def generate_solution(cities_matrix):
     return [0] + np.random.permutation(np.arange(1, len(cities_matrix) - 1)).tolist() + [len(cities_matrix) - 1]
+
+
+def generate_initial_population(cities_matrix, size):
+    population = []
+    for i in range(size):
+        population.append(generate_solution(cities_matrix))
+    return population
