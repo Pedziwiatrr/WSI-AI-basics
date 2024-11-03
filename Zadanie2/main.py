@@ -3,9 +3,10 @@ import pathlib
 
 import numpy as np
 import pandas as pd
-from solution_utils import generate_solution
+from evolution import decode_solution, evolution_algorithm
 
 MINI_CITIES_NUM = 5
+ITERATIONS = 50
 
 
 def parse_args():
@@ -17,8 +18,8 @@ def parse_args():
         default="mini",
         help="Run algorithm on full or simplified problem setup",
     )
-    parser.add_argument("--start", type=str, default="Łomża")
-    parser.add_argument("--finish", type=str, default="Częstochowa")
+    parser.add_argument("--start", type=str, default="Skierniewice")
+    parser.add_argument("--finish", type=str, default="Warszawa")
     parser.add_argument("--seed", type=int)
     return parser.parse_args()
 
@@ -42,7 +43,12 @@ def main():
         np.random.seed(args.seed)
 
     data = load_data(args)
-    print(generate_solution(data))
+
+    solution, length = evolution_algorithm(data, ITERATIONS)
+    print("\n" + "="*100)
+    print("Best found solution: " + str(decode_solution(data, solution)))
+    print("\nDistance: " + str(round(length, 3)) + "km")
+    print("="*100 + "\n")
 
 
 if __name__ == "__main__":

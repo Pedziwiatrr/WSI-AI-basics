@@ -117,7 +117,7 @@ def evolution_algorithm(cities_matrix, generation_count):
     best_solution = None
     shortest_length = float('inf')
     for generation_id in range(generation_count):
-        print(generation_id)
+        print("Iteration: " + str(generation_id))
         new_population = generational_succession(cities_matrix, population)
         population = new_population
         for solution in population:
@@ -125,8 +125,9 @@ def evolution_algorithm(cities_matrix, generation_count):
             if solution_length < shortest_length:
                 shortest_length = solution_length
                 best_solution = solution
-                #print("Current best solution found: " + str(decode_solution(cities_matrix, best_solution)) + ', its distance: ' + str(shortest_length))
-    return best_solution
+                #print("Current best solution found: " + str(decode_solution(cities_matrix, best_solution))
+                print("New best distance found: " + str(shortest_length))
+    return best_solution, shortest_length
 
 
 
