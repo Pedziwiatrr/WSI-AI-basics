@@ -78,6 +78,7 @@ def crossover(cities_matrix, first_parent, second_parent):
             second_child[i] = second_remaining_part.pop(0)
     return first_child, second_child
 
+
 def generational_succession(cities_matrix, population):
     selection_chances = get_roulette_chances(cities_matrix, population)
     new_generation = []
@@ -105,8 +106,24 @@ def generational_succession(cities_matrix, population):
 
 
 def mutate(solution):
-    pass
+    swap_points = np.random.choice(range(1, len(solution)), 2, False)
+    solution[swap_points[0]], solution[swap_points[1]] = solution[swap_points[1]], solution[swap_points[0]]
+    return solution
 
+
+def evolution_algorithm(cities_matrix, generation_count):
+    population = generate_initial_population(cities_matrix, POPULATION_SIZE)
+    best_solution = None
+    shortest_length = float('inf')
+    for generation_id in range(generation_count):
+        new_population = generational_succession(cities_matrix, population)
+        population = new_population
+        for solution in population:
+            solution_length = evaluate_solution(cities_matrix, solution)
+            if solution_length < shortest_length:
+                shortest_length = solution_length
+                best_solution = solution
+    return best_solution
 
 
 
