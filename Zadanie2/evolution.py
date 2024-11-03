@@ -95,12 +95,12 @@ def generational_succession(cities_matrix, population):
         first_child = mutate(first_child)
         second_child = mutate(second_child)
         # skip the children and notify about potential improper solutions
-        try:
-            validate_solution(cities_matrix, first_child)
-            validate_solution(cities_matrix, second_child)
-        except AssertionError:
-            #print("Incorrect solution detected!")
-            continue
+        for solution in [first_child, second_child]:
+            try:
+                validate_solution(cities_matrix, solution)
+            except AssertionError:
+                print("Incorrect solution detected! : " + str(decode_solution(cities_matrix, solution)))
+                continue
         new_generation.append(first_child)
         new_generation.append(second_child)
     return new_generation
