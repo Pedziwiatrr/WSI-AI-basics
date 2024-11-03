@@ -1,5 +1,5 @@
 import numpy as np
-
+import random
 
 POPULATION_SIZE = 1000
 CROSSOVER_PROBABILITY = 0.5
@@ -36,7 +36,7 @@ def generate_initial_population(cities_matrix, size):
     return population
 
 
-def select_solutions(cities_matrix, population):
+def get_roulette_chances(cities_matrix, population):
     scores = []
     total_fitness_score = 0
     # calculate fitness score = 1/distance for every solution and add it to roulette wheel pool
@@ -46,11 +46,14 @@ def select_solutions(cities_matrix, population):
         fitness_score = 1 / distance
         total_fitness_score += fitness_score
         scores.append(fitness_score)
-    # select part of solutions with probability depending on their fitness scores
     assert total_fitness_score > 0
-    selection_chance = [score / total_fitness_score for score in scores]
-    selected = np.random.choice(population, POPULATION_SIZE * CROSSOVER_PROBABILITY, p=selection_chance)
-    return selected
+    # return solutions probabilities based on their fitness score
+    selection_chances = [score / total_fitness_score for score in scores]
+    return selection_chances
+
+def select_solution(cities_matrix, population, selection_chances):
+    # select solution based on set probability
+    return np.random.choice(population, p=selection_chances)
 
 
 def crossover(cities_matrix, first_parent, second_parent):
@@ -74,6 +77,23 @@ def crossover(cities_matrix, first_parent, second_parent):
             second_child[i] = second_remaining_part.pop(0)
     return first_child, second_child
 
+def generational_succession(cities_matrix, population):
+    selection_chances = get_roulette_chances(cities_matrix, population)
+    new_generation = []
+    while len(new_generation) < len(population):
+        # select parents using roulette selection algorithm
+        first_parent = select_solution(cities_matrix, population, selection_chances)
+        second_parent = select_solution(cities_matrix, population, selection_chances)
+        # crossover or not based on set probability
+        if random.uniform(0, 1) > CROSSOVER_PROBABILITY:
+            first_child, second_child = first_parent, second_parent
+        else:
+            first_child, second_child = crossover(cities_matrix, first_parent, second_parent)
+        mutate(first_child)
+        mutate(second_child)
+        new_generation.append(first_child)
+        new_generation.append(second_child)
+    return new_generation
 
 
 def mutate(solution):
