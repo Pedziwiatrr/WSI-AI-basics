@@ -53,5 +53,37 @@ def select_solutions(cities_matrix, population):
     return selected
 
 
+def two_point_crossover(cities_matrix, first_parent, second_parent):
+    # select 2 indexes to set crossover points
+    crossover_points = np.random.choice(range(1, len(first_parent)), 2, False)
+    start_point = crossover_points[0]
+    end_point = crossover_points[1]
+    # place points in order
+    if start_point > end_point:
+        temp = end_point
+        end_point = start_point
+        start_point = temp
+    # copy parent solutions
+    first_child = first_parent.copy()
+    second_child = second_parent.copy()
+    # swap parts between selected points
+    first_child[start_point:end_point] = second_parent[start_point:end_point]
+    second_child[start_point:end_point] = first_parent[start_point:end_point]
+
+    try:
+        validate_solution(cities_matrix, first_child)
+        validate_solution(cities_matrix, second_child)
+    except AssertionError:
+        pass
+        # here will be the part where solutions are being "fixed"
+
+
+def mutate(solution):
+    pass
+
+
+
+
+
 
 
