@@ -54,7 +54,8 @@ def get_roulette_chances(cities_matrix, population):
 
 def select_solution(cities_matrix, population, selection_chances):
     # select solution based on set probability
-    return np.random.choice(population, p=selection_chances)
+    solution_index = np.random.choice(range(len(population)), size=1, p=selection_chances)[0]
+    return population[solution_index]
 
 
 def crossover(cities_matrix, first_parent, second_parent):
@@ -95,10 +96,10 @@ def generational_succession(cities_matrix, population):
         second_child = mutate(second_child)
         # skip the children and notify about potential improper solutions
         try:
-            validate_solution(first_child)
-            validate_solution(second_child)
+            validate_solution(cities_matrix, first_child)
+            validate_solution(cities_matrix, second_child)
         except AssertionError:
-            print("Incorrect solution detected!")
+            #print("Incorrect solution detected!")
             continue
         new_generation.append(first_child)
         new_generation.append(second_child)
@@ -116,6 +117,7 @@ def evolution_algorithm(cities_matrix, generation_count):
     best_solution = None
     shortest_length = float('inf')
     for generation_id in range(generation_count):
+        print(generation_id)
         new_population = generational_succession(cities_matrix, population)
         population = new_population
         for solution in population:
@@ -123,6 +125,7 @@ def evolution_algorithm(cities_matrix, generation_count):
             if solution_length < shortest_length:
                 shortest_length = solution_length
                 best_solution = solution
+                print("Current best solution found: " + str(decode_solution(cities_matrix, best_solution)) + ', its distance: ' + str(shortest_length))
     return best_solution
 
 
