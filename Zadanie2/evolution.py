@@ -53,29 +53,27 @@ def select_solutions(cities_matrix, population):
     return selected
 
 
-def two_point_crossover(cities_matrix, first_parent, second_parent):
+def crossover(cities_matrix, first_parent, second_parent):
     # select 2 indexes to set crossover points
     crossover_points = np.random.choice(range(1, len(first_parent)), 2, False)
-    start_point = crossover_points[0]
-    end_point = crossover_points[1]
-    # place points in order
-    if start_point > end_point:
-        temp = end_point
-        end_point = start_point
-        start_point = temp
-    # copy parent solutions
+    start_point, end_point = sorted(crossover_points)
     first_child = first_parent.copy()
     second_child = second_parent.copy()
-    # swap parts between selected points
-    first_child[start_point:end_point] = second_parent[start_point:end_point]
-    second_child[start_point:end_point] = first_parent[start_point:end_point]
+    # swap the values between selected points in children
+    first_middle_part = first_parent[start_point:end_point]
+    second_middle_part = second_parent[start_point:end_point]
+    first_child[start_point:end_point] = second_middle_part
+    second_child[start_point:end_point] = first_middle_part
+    # select the remaining parts with cities that would be missing after the swap
+    first_remaining_part = [city for city in first_parent if city not in second_middle_part]
+    second_remaining_part = [city for city in second_parent if city not in first_middle_part]
+    # replace children's not-middle values with remaining cities to avoid duplicates and missing cities
+    for i in range(0, len(first_parent)):
+        if i not in range(start_point, end_point):
+            first_child[i] = first_remaining_part.pop(0)
+            second_child[i] = second_remaining_part.pop(0)
+    return first_child, second_child
 
-    try:
-        validate_solution(cities_matrix, first_child)
-        validate_solution(cities_matrix, second_child)
-    except AssertionError:
-        pass
-        # here will be the part where solutions are being "fixed"
 
 
 def mutate(solution):
