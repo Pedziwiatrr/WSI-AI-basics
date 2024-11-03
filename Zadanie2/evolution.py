@@ -60,7 +60,7 @@ def select_solution(cities_matrix, population, selection_chances):
 
 def crossover(cities_matrix, first_parent, second_parent):
     # select 2 indexes to set crossover points
-    crossover_points = np.random.choice(range(1, len(first_parent)), 2, False)
+    crossover_points = np.random.choice(range(1, len(first_parent)-1), 2, False)
     start_point, end_point = sorted(crossover_points)
     first_child = first_parent.copy()
     second_child = second_parent.copy()
@@ -107,7 +107,7 @@ def generational_succession(cities_matrix, population):
 
 
 def mutate(solution):
-    swap_points = np.random.choice(range(1, len(solution)), 2, False)
+    swap_points = np.random.choice(range(1, len(solution) -1), 2, False)
     solution[swap_points[0]], solution[swap_points[1]] = solution[swap_points[1]], solution[swap_points[0]]
     return solution
 
@@ -125,7 +125,7 @@ def evolution_algorithm(cities_matrix, generation_count):
             if solution_length < shortest_length:
                 shortest_length = solution_length
                 best_solution = solution
-                print("Current best solution found: " + str(decode_solution(cities_matrix, best_solution)) + ', its distance: ' + str(shortest_length))
+                #print("Current best solution found: " + str(decode_solution(cities_matrix, best_solution)) + ', its distance: ' + str(shortest_length))
     return best_solution
 
 
