@@ -2,7 +2,7 @@ import numpy as np
 import random
 
 POPULATION_SIZE = 1000
-CROSSOVER_PROBABILITY = 0.5
+CROSSOVER_PROBABILITY = 0.75
 
 
 def decode_solution(cities_matrix, solution):
@@ -113,20 +113,27 @@ def mutate(solution):
 
 
 def evolution_algorithm(cities_matrix, generation_count):
+    evaluated_solutions = set()
     population = generate_initial_population(cities_matrix, POPULATION_SIZE)
     best_solution = None
     shortest_length = float('inf')
+    # create new population every generation
     for generation_id in range(generation_count):
         print("Iteration: " + str(generation_id))
         new_population = generational_succession(cities_matrix, population)
         population = new_population
         for solution in population:
-            solution_length = evaluate_solution(cities_matrix, solution)
-            if solution_length < shortest_length:
-                shortest_length = solution_length
-                best_solution = solution
-                #print("Current best solution found: " + str(decode_solution(cities_matrix, best_solution))
-                print("New best distance found: " + str(shortest_length))
+            solution_tuple = tuple(solution)
+            # if identical solution wasnt evaluated yet, do it
+            if solution_tuple not in evaluated_solutions:
+                evaluated_solutions.add(solution_tuple)
+                solution_length = evaluate_solution(cities_matrix, solution)
+                # if current evaluated solution is the best yet, change our output values
+                if solution_length < shortest_length:
+                    shortest_length = solution_length
+                    best_solution = solution
+                    #print("Current best solution found: " + str(decode_solution(cities_matrix, best_solution))
+                    print("New best distance found: " + str(shortest_length))
     return best_solution, shortest_length
 
 
