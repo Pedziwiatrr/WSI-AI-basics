@@ -1,5 +1,6 @@
 import argparse
 import pathlib
+import time
 
 import numpy as np
 import pandas as pd
@@ -44,10 +45,15 @@ def main():
 
     data = load_data(args)
 
+    start_time = time.time()
     solution, length = evolution_algorithm(data, ITERATIONS)
+    end_time = time.time()
+    total_time = end_time - start_time
+
     print("\n" + "="*100)
     print("Best found solution: " + str(decode_solution(data, solution)))
     print("\nDistance: " + str(round(length, 3)) + "km")
+    print("Execution time: " + str(total_time) + "s")
     print("="*100 + "\n")
 
 
