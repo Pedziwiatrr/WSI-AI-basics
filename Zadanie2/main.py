@@ -5,9 +5,10 @@ import time
 import numpy as np
 import pandas as pd
 from evolution import decode_solution, evolution_algorithm
+from mapper import create_map
 
 MINI_CITIES_NUM = 5
-ITERATIONS = 50
+ITERATIONS = 100
 
 
 def parse_args():
@@ -22,6 +23,7 @@ def parse_args():
     parser.add_argument("--start", type=str, default="Skierniewice")
     parser.add_argument("--finish", type=str, default="Warszawa")
     parser.add_argument("--seed", type=int)
+    parser.add_argument("--map", type=bool, help="Flag to generate map visualization")
     return parser.parse_args()
 
 
@@ -55,6 +57,9 @@ def main():
     print("\nDistance: " + str(round(length, 3)) + "km")
     print("Execution time: " + str(total_time) + "s")
     print("="*100 + "\n")
+    if args.map:
+        create_map(decode_solution(data, solution))
+
 
 
 if __name__ == "__main__":
