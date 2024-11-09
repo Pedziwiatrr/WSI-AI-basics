@@ -8,7 +8,7 @@ from evolution import decode_solution, evolution_algorithm
 from mapper import create_map
 
 MINI_CITIES_NUM = 5
-ITERATIONS = 100
+ITERATIONS = 1
 POPULATION_SIZE = 250
 CROSSOVER_PROBABILITY = 0.75
 MUTATION_PROBABILITY = 0.5
@@ -26,7 +26,7 @@ def parse_args():
     parser.add_argument("--start", type=str, default="Skierniewice")
     parser.add_argument("--finish", type=str, default="Warszawa")
     parser.add_argument("--seed", type=int)
-    parser.add_argument("--map", type=bool, help="Flag to generate map visualization")
+    parser.add_argument("--map", action="store_true", help="Flag to generate map visualization")
     return parser.parse_args()
 
 
@@ -65,7 +65,6 @@ def main():
     print("="*100 + "\n")
     if args.map:
         create_map(decode_solution(data, solution))
-
 
 
 if __name__ == "__main__":
