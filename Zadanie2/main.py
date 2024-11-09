@@ -9,6 +9,9 @@ from mapper import create_map
 
 MINI_CITIES_NUM = 5
 ITERATIONS = 100
+POPULATION_SIZE = 250
+CROSSOVER_PROBABILITY = 0.75
+MUTATION_PROBABILITY = 0.5
 
 
 def parse_args():
@@ -48,7 +51,7 @@ def main():
     data = load_data(args)
 
     start_time = time.time()
-    solution, length = evolution_algorithm(data, ITERATIONS)
+    solution, length = evolution_algorithm(data, ITERATIONS, POPULATION_SIZE, CROSSOVER_PROBABILITY, MUTATION_PROBABILITY)
     end_time = time.time()
     total_time = end_time - start_time
 
@@ -56,6 +59,9 @@ def main():
     print("Best found solution: " + str(decode_solution(data, solution)))
     print("\nDistance: " + str(round(length, 3)) + "km")
     print("Execution time: " + str(total_time) + "s")
+    print("Generation count: " + str(ITERATIONS) + "\nCrossover probability: " + str(CROSSOVER_PROBABILITY*100) + "%")
+    print("Mutation probability: " + str(MUTATION_PROBABILITY*100) + "%")
+    print("")
     print("="*100 + "\n")
     if args.map:
         create_map(decode_solution(data, solution))

@@ -1,9 +1,6 @@
 import numpy as np
 import random
 
-POPULATION_SIZE = 1000
-CROSSOVER_PROBABILITY = 0.75
-
 
 def decode_solution(cities_matrix, solution):
     # return cities names using their indexes in solution
@@ -80,7 +77,7 @@ def crossover(cities_matrix, first_parent, second_parent):
     return first_child, second_child
 
 
-def generational_succession(cities_matrix, population):
+def generational_succession(cities_matrix, population, crossover_probability, mutation_probability):
     selection_chances = get_roulette_chances(cities_matrix, population)
     new_generation = []
     while len(new_generation) < len(population):
@@ -88,12 +85,13 @@ def generational_succession(cities_matrix, population):
         first_parent = select_solution(cities_matrix, population, selection_chances)
         second_parent = select_solution(cities_matrix, population, selection_chances)
         # crossover or not based on set probability
-        if random.uniform(0, 1) > CROSSOVER_PROBABILITY:
+        if random.uniform(0, 1) > crossover_probability:
             first_child, second_child = first_parent, second_parent
         else:
             first_child, second_child = crossover(cities_matrix, first_parent, second_parent)
-        first_child = mutate(first_child)
-        second_child = mutate(second_child)
+        if random.uniform(0, 1) > mutation_probability:
+            first_child = mutate(first_child)
+            second_child = mutate(second_child)
         # skip the children and notify about potential improper solutions
         for solution in [first_child, second_child]:
             try:
@@ -112,15 +110,15 @@ def mutate(solution):
     return solution
 
 
-def evolution_algorithm(cities_matrix, generation_count):
+def evolution_algorithm(cities_matrix, generation_count, population_size, crossover_probability, mutation_probability):
     evaluated_solutions = set()
-    population = generate_initial_population(cities_matrix, POPULATION_SIZE)
+    population = generate_initial_population(cities_matrix, population_size)
     best_solution = None
     shortest_length = float('inf')
     # create new population every generation
     for generation_id in range(generation_count):
         print("Iteration: " + str(generation_id))
-        new_population = generational_succession(cities_matrix, population)
+        new_population = generational_succession(cities_matrix, population, crossover_probability, mutation_probability)
         population = new_population
         for solution in population:
             solution_tuple = tuple(solution)
