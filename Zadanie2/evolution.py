@@ -40,7 +40,7 @@ def get_roulette_chances(cities_matrix, population):
     for solution in population:
         distance = evaluate_solution(cities_matrix, solution)
         assert distance > 0
-        fitness_score = 1 / distance
+        fitness_score = 1 / (distance ** 8)
         total_fitness_score += fitness_score
         scores.append(fitness_score)
     assert total_fitness_score > 0
@@ -55,7 +55,7 @@ def select_solution(cities_matrix, population, selection_chances):
     return population[solution_index]
 
 
-def crossover(cities_matrix, first_parent, second_parent):
+def crossover(cities_matrix, first_parent, second_parent, crossover_type="two_point"):
     # select 2 indexes to set crossover points
     crossover_points = np.random.choice(range(1, len(first_parent)-1), 2, False)
     start_point, end_point = sorted(crossover_points)
@@ -84,6 +84,8 @@ def generational_succession(cities_matrix, population, crossover_probability, mu
         # select parents using roulette selection algorithm
         first_parent = select_solution(cities_matrix, population, selection_chances)
         second_parent = select_solution(cities_matrix, population, selection_chances)
+        # first_parent = random.choice(population)
+        # second_parent = random.choice(population)
         # crossover or not based on set probability
         if random.uniform(0, 1) > crossover_probability:
             first_child, second_child = first_parent, second_parent
@@ -115,9 +117,12 @@ def evolution_algorithm(cities_matrix, generation_count, population_size, crosso
     population = generate_initial_population(cities_matrix, population_size)
     best_solution = None
     shortest_length = float('inf')
+    duplicates = 0
     # create new population every generation
     for generation_id in range(generation_count):
-        print("Iteration: " + str(generation_id))
+        if generation_id % 10 == 0:
+            print("Generation: " + str(generation_id) + " | Unique evaluated solutions: " + str(len(evaluated_solutions)))
+            print("Duplicates: " + str(duplicates))
         new_population = generational_succession(cities_matrix, population, crossover_probability, mutation_probability)
         population = new_population
         for solution in population:
@@ -132,6 +137,8 @@ def evolution_algorithm(cities_matrix, generation_count, population_size, crosso
                     best_solution = solution
                     #print("Current best solution found: " + str(decode_solution(cities_matrix, best_solution))
                     print("New best distance found: " + str(shortest_length))
+            else:
+                duplicates += 1
     return best_solution, shortest_length
 
 
