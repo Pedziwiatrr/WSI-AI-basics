@@ -8,7 +8,7 @@ from evolution import decode_solution, evolution_algorithm
 from mapper import create_map
 
 MINI_CITIES_NUM = 5
-ITERATIONS = 1
+ITERATIONS = 1000
 POPULATION_SIZE = 250
 CROSSOVER_PROBABILITY = 0.75
 MUTATION_PROBABILITY = 0.5
@@ -59,8 +59,8 @@ def main():
     print("Best found solution: " + str(decode_solution(data, solution)))
     print("\nDistance: " + str(round(length, 3)) + "km")
     print("Execution time: " + str(total_time) + "s")
-    print("Generation count: " + str(ITERATIONS) + "\nCrossover probability: " + str(CROSSOVER_PROBABILITY*100) + "%")
-    print("Mutation probability: " + str(MUTATION_PROBABILITY*100) + "%")
+    print("Generation count: " + str(ITERATIONS) + "\nPopulation size: " + str(POPULATION_SIZE))
+    print( "\nCrossover probability: " + str(CROSSOVER_PROBABILITY*100) + "%\nMutation probability: " + str(MUTATION_PROBABILITY*100) + "%")
     print("")
     print("="*100 + "\n")
     if args.map:
