@@ -91,7 +91,7 @@ def generational_succession(cities_matrix, population, crossover_probability, mu
             first_child, second_child = first_parent, second_parent
         else:
             first_child, second_child = crossover(cities_matrix, first_parent, second_parent)
-        if random.uniform(0, 1) > mutation_probability:
+        if random.uniform(0, 1) < mutation_probability:
             first_child = mutate(first_child)
             second_child = mutate(second_child)
         # skip the children and notify about potential improper solutions
@@ -120,7 +120,7 @@ def evolution_algorithm(cities_matrix, generation_count, population_size, crosso
     duplicates = 0
     # create new population every generation
     for generation_id in range(generation_count):
-        if generation_id % 10 == 0:
+        if generation_id % 100 == 0:
             print("Generation: " + str(generation_id) + " | Unique evaluated solutions: " + str(len(evaluated_solutions)))
             print("Duplicates: " + str(duplicates))
         new_population = generational_succession(cities_matrix, population, crossover_probability, mutation_probability)
