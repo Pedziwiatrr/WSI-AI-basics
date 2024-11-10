@@ -16,7 +16,7 @@ def get_city_coordinates(cities):
 
 def plot_city_route(cities, coordinates):
     fig, ax = plt.subplots(figsize=(10, 10))
-    ax.set_title("Route through selected Polish cities")
+    ax.set_title("TSP Route")
 
     lons = [coordinates[city][0] for city in cities if city in coordinates]
     lats = [coordinates[city][1] for city in cities if city in coordinates]
