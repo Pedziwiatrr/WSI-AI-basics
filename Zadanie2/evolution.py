@@ -40,7 +40,7 @@ def get_roulette_chances(cities_matrix, population):
     for solution in population:
         distance = evaluate_solution(cities_matrix, solution)
         assert distance > 0
-        fitness_score = 1 / (distance ** 8)
+        fitness_score = 1 / (distance ** 9)
         total_fitness_score += fitness_score
         scores.append(fitness_score)
     assert total_fitness_score > 0
