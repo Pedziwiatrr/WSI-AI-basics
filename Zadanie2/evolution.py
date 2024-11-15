@@ -55,7 +55,7 @@ def select_solution(cities_matrix, population, selection_chances):
     return population[solution_index]
 
 
-def crossover(cities_matrix, first_parent, second_parent, crossover_type="two_point"):
+def crossover(cities_matrix, first_parent, second_parent):
     # select 2 indexes to set crossover points
     crossover_points = np.random.choice(range(1, len(first_parent)-1), 2, False)
     start_point, end_point = sorted(crossover_points)
