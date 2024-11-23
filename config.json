@@ -1,9 +1,11 @@
 {
     "x": {
-        "type": "human"
+        "type": "human",
+        "depth": 3
     },
     "o": {
-        "type": "random"
+        "type": "minimax",
+        "depth": 3
     },
     "gui": true
 }

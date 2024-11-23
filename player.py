@@ -42,7 +42,20 @@ class MinimaxComputerPlayer(Player):
     def __init__(self, game, config):
         super().__init__(game)
         # TODO: lab3 - load pruning depth from config
+        self.depth = config["depth"]
 
     def get_move(self, event_position):
         # TODO: lab3 - implement algorithm
+        value = self.minimax_evaluate(event_position)
         raise NotImplementedError
+
+    def minimax_evaluate(self, event_position):
+        available_moves = self.game.available_moves()
+        best_value = -np.inf
+        best_move = None
+
+        for move in available_moves:
+            print(move)
+
+        return best_value
+
