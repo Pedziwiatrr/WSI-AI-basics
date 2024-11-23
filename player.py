@@ -43,19 +43,53 @@ class MinimaxComputerPlayer(Player):
         super().__init__(game)
         # TODO: lab3 - load pruning depth from config
         self.depth = config["depth"]
+        self.char = "o"
+
 
     def get_move(self, event_position):
         # TODO: lab3 - implement algorithm
-        value = self.minimax_evaluate(event_position)
+        current_board = self.game.board
+        value = self.minimax(current_board)
         raise NotImplementedError
 
-    def minimax_evaluate(self, event_position):
+
+    def get_board_after_move(self, move, board):
+        board[move] = self.char
+        return board
+
+
+    def evaluate_board(self, board):
+        winner = self.game.get_winner()
+        match winner:
+            case "" | "t":
+                return 0
+            case self.char:
+                print("win")
+                return 1
+            case _:
+                print("lose")
+                return -1
+
+
+    def minimax(self, current_board):
         available_moves = self.game.available_moves()
         best_value = -np.inf
         best_move = None
 
         for move in available_moves:
-            print(move)
+            board_copy = current_board.copy()
+            board_after_move = self.get_board_after_move(move, board_copy)
+            value = self.evaluate_board(board_after_move)
+            #print(value)
+            if value == 0:
+                value, move = self.minimax(board_after_move)
+            if value > best_value:
+                best_value = value
+                print("aaaaaaa")
+                best_move = move
 
-        return best_value
+        return best_value, best_move
+
+
+
 
