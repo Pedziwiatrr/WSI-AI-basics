@@ -49,7 +49,7 @@ class MinimaxComputerPlayer(Player):
     def get_move(self, event_position):
         # TODO: lab3 - implement algorithm
         current_board = self.game.board
-        value, move = self.minimax(current_board)
+        value, move = self.minimax(current_board, True)
         if move is None:
             print("random")
             available_moves = self.game.available_moves()
@@ -77,24 +77,31 @@ class MinimaxComputerPlayer(Player):
                 return -1
 
 
-    def minimax(self, board, depth=0):
-        available_moves = self.game.available_moves()
-        best_value = -np.inf
+    def minimax(self, board, maximizing, depth=0):
+        if maximizing:
+            best_value = -np.inf
+        else:
+            best_value = np.inf
         best_move = None
-
+        maximizing = not maximizing
+        available_moves = self.game.available_moves()
+        value = self.evaluate_board(board)
 
         if depth == self.depth or self.game.get_winner() != "":
-            best_value = self.evaluate_board(board)
-            return best_value, best_move
-        value = self.evaluate_board(board)
+            return value, None
+
         for move in available_moves:
             board_after_move = self.get_board_after_move(move, board)
             #print(value)
+            print("maximizing: " + str(maximizing))
             if value == 0:
-                value, next_move = self.minimax(board_after_move, depth+1)
-            if value > best_value:
+                value, next_move = self.minimax(board_after_move, maximizing, depth+1)
+            elif value in [-1, 1]:
+                print(value)
+            if (maximizing and value > best_value) or (not maximizing and value < best_value):
                 best_value = value
                 best_move = move
+
         return best_value, best_move
 
 
