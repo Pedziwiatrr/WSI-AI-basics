@@ -35,6 +35,7 @@ class RandomComputerPlayer(Player):
     def get_move(self, event_position):
         available_moves = self.game.available_moves()
         move_id = np.random.choice(len(available_moves))
+        print(available_moves[move_id])
         return available_moves[move_id]
 
 
@@ -44,10 +45,13 @@ class MinimaxComputerPlayer(Player):
         # TODO: lab3 - load pruning depth from config
         self.depth = config["depth"]
         self.char = "o"
+        self.iterations = 0
 
 
     def get_move(self, event_position):
         # TODO: lab3 - implement algorithm
+        print(self.iterations)
+        self.iterations = 0
         current_board = self.game.board
         value, move = self.minimax(current_board, True)
         if move is None:
@@ -66,6 +70,7 @@ class MinimaxComputerPlayer(Player):
 
     def evaluate_board(self, board):
         winner = self.game.get_winner()
+        #print(winner)
         match winner:
             case "" | "t":
                 return 0
@@ -78,30 +83,31 @@ class MinimaxComputerPlayer(Player):
 
 
     def minimax(self, board, maximizing, depth=0):
+        self.iterations += 1
+        #print(self.iterations)
         if maximizing:
             best_value = -np.inf
         else:
             best_value = np.inf
         best_move = None
-        maximizing = not maximizing
         available_moves = self.game.available_moves()
-        value = self.evaluate_board(board)
-
-        if depth == self.depth or self.game.get_winner() != "":
-            return value, None
+        #print("Depth: " + str(depth) + " available moves: " + str(len(available_moves)))
+        if depth == self.depth or self.game.get_winner() != "" or len(available_moves) == 0:
+            #print("reached the end")
+            return self.evaluate_board(board), None
 
         for move in available_moves:
+            #print(move)
             board_after_move = self.get_board_after_move(move, board)
-            #print(value)
-            print("maximizing: " + str(maximizing))
-            if value == 0:
-                value, next_move = self.minimax(board_after_move, maximizing, depth+1)
-            elif value in [-1, 1]:
-                print(value)
+            #print("maximizing: " + str(maximizing))
+            #print(depth)
+            value, next_move = self.minimax(board_after_move, not maximizing, depth+1)
             if (maximizing and value > best_value) or (not maximizing and value < best_value):
                 best_value = value
                 best_move = move
-
+                #print("Best move: " + str(best_move) + " Best Value: " + str(best_value))
+            if value not in [np.inf, -np.inf, 0]:
+                print(value)
         return best_value, best_move
 
 
