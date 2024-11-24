@@ -19,31 +19,33 @@ class TicTacToe:
     def is_free(self, logical_position):
         return self.board[tuple(logical_position)] == ""
 
-    def get_winner(self):
+    def get_winner(self, board=None):
+        if board is None: board = self.board
         for i in range(N_ROWS):
-            row_unique_elements = np.unique(self.board[i, :])
-            col_unique_elements = np.unique(self.board[:, i])
+            row_unique_elements = np.unique(board[i, :])
+            col_unique_elements = np.unique(board[:, i])
 
             if len(row_unique_elements) == 1 and row_unique_elements.item() != "":
                 return row_unique_elements.item()
             if len(col_unique_elements) == 1 and col_unique_elements.item() != "":
                 return col_unique_elements.item()
 
-        diagonal_unique_elements = np.unique(np.diagonal(self.board))
-        antidiagonal_unique_elements = np.unique(np.diagonal(np.flipud(self.board)))
+        diagonal_unique_elements = np.unique(np.diagonal(board))
+        antidiagonal_unique_elements = np.unique(np.diagonal(np.flipud(board)))
         if len(diagonal_unique_elements) == 1 and diagonal_unique_elements.item() != "":
             return diagonal_unique_elements.item()
 
         if len(antidiagonal_unique_elements) == 1 and antidiagonal_unique_elements.item() != "":
             return antidiagonal_unique_elements.item()
 
-        if np.all(self.board != ""):
+        if np.all(board != ""):
             return "t"
 
         return ""
 
     def move(self, logical_position):
         new_symbol = ""
+        #print(self.board)
         if not self.is_free(logical_position):
             return new_symbol
 
@@ -55,5 +57,6 @@ class TicTacToe:
         self.player_x_turn = not self.player_x_turn
         return new_symbol
 
-    def available_moves(self):
-        return np.argwhere((self.board == ""))
+    def available_moves(self, board=None):
+        if board is None: board = self.board
+        return np.argwhere((board == ""))

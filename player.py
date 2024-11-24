@@ -35,7 +35,7 @@ class RandomComputerPlayer(Player):
     def get_move(self, event_position):
         available_moves = self.game.available_moves()
         move_id = np.random.choice(len(available_moves))
-        print(available_moves[move_id])
+        #print(available_moves[move_id])
         return available_moves[move_id]
 
 
@@ -50,7 +50,6 @@ class MinimaxComputerPlayer(Player):
 
     def get_move(self, event_position):
         # TODO: lab3 - implement algorithm
-        print(self.iterations)
         self.iterations = 0
         current_board = self.game.board
         value, move = self.minimax(current_board, True)
@@ -64,50 +63,40 @@ class MinimaxComputerPlayer(Player):
 
     def get_board_after_move(self, move, board):
         board_copy = board.copy()
-        board_copy[move] = self.char
+        board_copy[move[0], move[1]] = self.char
         return board_copy
 
 
-    def evaluate_board(self, board):
-        winner = self.game.get_winner()
-        #print(winner)
-        match winner:
-            case "" | "t":
-                return 0
-            case self.char:
-                print("win")
-                return 1
-            case _:
-                print("lose")
-                return -1
+    def evaluate_board(self, board, is_maximizing):
+        winner = self.game.get_winner(board)
 
-
-    def minimax(self, board, maximizing, depth=0):
-        self.iterations += 1
-        #print(self.iterations)
-        if maximizing:
-            best_value = -np.inf
+        if winner == "" or winner == "t":
+            return 0
+        elif winner == self.char:
+            if is_maximizing: return 1
+            else: return -1
         else:
-            best_value = np.inf
+            if is_maximizing: return -1
+            else: return 1
+
+
+    def minimax(self, board, is_maximizing, depth=0):
+        self.iterations += 1
+        print(self.iterations)
+        if is_maximizing: best_value = -np.inf
+        else: best_value = np.inf
         best_move = None
-        available_moves = self.game.available_moves()
-        #print("Depth: " + str(depth) + " available moves: " + str(len(available_moves)))
-        if depth == self.depth or self.game.get_winner() != "" or len(available_moves) == 0:
-            #print("reached the end")
-            return self.evaluate_board(board), None
+        available_moves = self.game.available_moves(board)
+        if depth == self.depth or self.game.get_winner(board) != "":
+            return self.evaluate_board(board, is_maximizing), None
 
         for move in available_moves:
-            #print(move)
             board_after_move = self.get_board_after_move(move, board)
-            #print("maximizing: " + str(maximizing))
-            #print(depth)
-            value, next_move = self.minimax(board_after_move, not maximizing, depth+1)
-            if (maximizing and value > best_value) or (not maximizing and value < best_value):
+            value, next_move = self.minimax(board_after_move, not is_maximizing, depth+1)
+            if (is_maximizing and value > best_value) or (not is_maximizing and value < best_value):
                 best_value = value
                 best_move = move
-                #print("Best move: " + str(best_move) + " Best Value: " + str(best_value))
-            if value not in [np.inf, -np.inf, 0]:
-                print(value)
+            print(f"Depth: {depth}, Move: {move}, Value: {value}, Best Value: {best_value}, Best Move: {best_move}, is_maximizing: {is_maximizing}")
         return best_value, best_move
 
 
