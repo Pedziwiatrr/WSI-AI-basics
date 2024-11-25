@@ -101,7 +101,6 @@ class MinimaxComputerPlayer(Player):
                 best_value = value
                 best_move = move
                 print(best_value)
-            #print(f"Depth: {depth}, Move: {move}, Value: {value}, Best Value: {best_value}, Best Move: {best_move}, is_maximizing: {is_maximizing}")
         print(f"Depth: {depth}, Best Value: {best_value}, Best Move: {best_move}, is_maximizing: {is_maximizing}")
         return best_value, best_move
 
