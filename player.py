@@ -83,7 +83,7 @@ class MinimaxComputerPlayer(Player):
         else: return -1
 
 
-    def minimax(self, board, is_maximizing, depth=0):
+    def minimax(self, board, is_maximizing, depth=0, alpha=-np.inf, beta=np.inf):
         if is_maximizing: best_value = -np.inf
         else: best_value = np.inf
         best_move = None
@@ -97,10 +97,12 @@ class MinimaxComputerPlayer(Player):
             if (is_maximizing and value > best_value) or (not is_maximizing and value < best_value):
                 best_value = value
                 best_move = move
-            if not is_maximizing and value < best_value:
-                best_value = value
-                best_move = move
-                print(best_value)
+                if is_maximizing:
+                    alpha = max(alpha, best_value)
+                else:
+                    beta = min(beta, best_value)
+                if beta <= alpha:
+                    break
         print(f"Depth: {depth}, Best Value: {best_value}, Best Move: {best_move}, is_maximizing: {is_maximizing}")
         return best_value, best_move
 
