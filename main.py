@@ -25,8 +25,8 @@ if __name__ == "__main__":
         config = json.load(f)
 
     game = TicTacToe()
-    player_x = build_player(config["x"], game)
-    player_o = build_player(config["o"], game)
+    player_x = build_player(config["x"], game, "x")
+    player_o = build_player(config["o"], game, "o")
 
     if config["gui"]:
         gui = GameGUI(game, player_x, player_o)

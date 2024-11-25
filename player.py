@@ -3,7 +3,7 @@ import copy
 import numpy as np
 
 
-def build_player(player_config, game):
+def build_player(player_config, game, char=None):
     assert player_config["type"] in ["human", "random", "minimax"]
 
     if player_config["type"] == "human":
@@ -13,7 +13,7 @@ def build_player(player_config, game):
         return RandomComputerPlayer(game)
 
     if player_config["type"] == "minimax":
-        return MinimaxComputerPlayer(game, player_config)
+        return MinimaxComputerPlayer(game, char, player_config)
 
 
 class Player(ABC):
@@ -40,11 +40,11 @@ class RandomComputerPlayer(Player):
 
 
 class MinimaxComputerPlayer(Player):
-    def __init__(self, game, config):
+    def __init__(self, game, char, config):
         super().__init__(game)
         # TODO: lab3 - load pruning depth from config
         self.depth = config["depth"]
-        self.char = "o"
+        self.char = char
 
 
     def get_move(self, event_position):
@@ -52,11 +52,10 @@ class MinimaxComputerPlayer(Player):
         current_board = self.game.board
         value, move = self.minimax(current_board, True)
         if move is None:
-            print("random")
+            print("Move is None, choosing random move...")
             available_moves = self.game.available_moves()
             move_id = np.random.choice(len(available_moves))
             move = available_moves[move_id]
-        print(f"Final value: {value}")
         return move
 
 
@@ -103,6 +102,7 @@ class MinimaxComputerPlayer(Player):
                     beta = min(beta, best_value)
                 if beta <= alpha:
                     break
+
         print(f"Depth: {depth}, Best Value: {best_value}, Best Move: {best_move}, is_maximizing: {is_maximizing}")
         return best_value, best_move
 
