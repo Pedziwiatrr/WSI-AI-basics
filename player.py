@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-
+import copy
 import numpy as np
 
 
@@ -45,12 +45,10 @@ class MinimaxComputerPlayer(Player):
         # TODO: lab3 - load pruning depth from config
         self.depth = config["depth"]
         self.char = "o"
-        self.iterations = 0
 
 
     def get_move(self, event_position):
         # TODO: lab3 - implement algorithm
-        self.iterations = 0
         current_board = self.game.board
         value, move = self.minimax(current_board, True)
         if move is None:
@@ -58,31 +56,34 @@ class MinimaxComputerPlayer(Player):
             available_moves = self.game.available_moves()
             move_id = np.random.choice(len(available_moves))
             move = available_moves[move_id]
+        print(f"Final value: {value}")
         return move
 
 
-    def get_board_after_move(self, move, board):
-        board_copy = board.copy()
-        board_copy[move[0], move[1]] = self.char
+    def minimax_simulate_move(self, move, board, is_maximizing):
+        board_copy = copy.deepcopy(board)
+        if self.char == "o":
+            if is_maximizing:
+                board_copy[move[0], move[1]] = "o"
+            elif not is_maximizing:
+                board_copy[move[0], move[1]] = "x"
+        elif self.char == "x":
+            if is_maximizing:
+                board_copy[move[0], move[1]] = "x"
+            elif not is_maximizing:
+                board_copy[move[0], move[1]] = "o"
         return board_copy
 
 
     def evaluate_board(self, board, is_maximizing):
         winner = self.game.get_winner(board)
-
         if winner == "" or winner == "t":
             return 0
-        elif winner == self.char:
-            if is_maximizing: return 1
-            else: return -1
-        else:
-            if is_maximizing: return -1
-            else: return 1
+        elif winner == self.char: return 1
+        else: return -1
 
 
     def minimax(self, board, is_maximizing, depth=0):
-        self.iterations += 1
-        print(self.iterations)
         if is_maximizing: best_value = -np.inf
         else: best_value = np.inf
         best_move = None
@@ -91,12 +92,17 @@ class MinimaxComputerPlayer(Player):
             return self.evaluate_board(board, is_maximizing), None
 
         for move in available_moves:
-            board_after_move = self.get_board_after_move(move, board)
+            board_after_move = self.minimax_simulate_move(move, board, is_maximizing)
             value, next_move = self.minimax(board_after_move, not is_maximizing, depth+1)
             if (is_maximizing and value > best_value) or (not is_maximizing and value < best_value):
                 best_value = value
                 best_move = move
-            print(f"Depth: {depth}, Move: {move}, Value: {value}, Best Value: {best_value}, Best Move: {best_move}, is_maximizing: {is_maximizing}")
+            if not is_maximizing and value < best_value:
+                best_value = value
+                best_move = move
+                print(best_value)
+            #print(f"Depth: {depth}, Move: {move}, Value: {value}, Best Value: {best_value}, Best Move: {best_move}, is_maximizing: {is_maximizing}")
+        print(f"Depth: {depth}, Best Value: {best_value}, Best Move: {best_move}, is_maximizing: {is_maximizing}")
         return best_value, best_move
 
 
