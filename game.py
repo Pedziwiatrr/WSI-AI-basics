@@ -45,7 +45,7 @@ class TicTacToe:
 
     def move(self, logical_position):
         new_symbol = ""
-        #print(self.board)
+        print(self.board)
         if not self.is_free(logical_position):
             return new_symbol
 
