@@ -7,5 +7,6 @@
         "type": "minimax",
         "depth": 6
     },
-    "gui": true
+    "gui": false,
+    "endless": true
 }
