@@ -7,19 +7,20 @@ def build_player(player_config, game, char=None):
     assert player_config["type"] in ["human", "random", "minimax"]
 
     if player_config["type"] == "human":
-        return HumanPlayer(game, True)
+        return HumanPlayer(game, char, True)
 
     if player_config["type"] == "random":
-        return RandomComputerPlayer(game, False)
+        return RandomComputerPlayer(game, char,False)
 
     if player_config["type"] == "minimax":
         return MinimaxComputerPlayer(game, char, player_config)
 
 
 class Player(ABC):
-    def __init__(self, game, is_human):
-        self.human = is_human
+    def __init__(self, game, char, is_human):
         self.game = game
+        self.char = char
+        self.is_human = is_human
         self.score = 0
 
     @abstractmethod
@@ -36,13 +37,12 @@ class RandomComputerPlayer(Player):
     def get_move(self, event_position=None):
         available_moves = self.game.available_moves()
         move_id = np.random.choice(len(available_moves))
-        #print(available_moves[move_id])
         return available_moves[move_id]
 
 
 class MinimaxComputerPlayer(Player):
     def __init__(self, game, char, config):
-        super().__init__(game, False)
+        super().__init__(game, char,False)
         # TODO: lab3 - load pruning depth from config
         self.is_human = False
         self.depth = config["depth"]
@@ -105,7 +105,7 @@ class MinimaxComputerPlayer(Player):
                 if beta <= alpha:
                     break
 
-        print(f"Depth: {depth}, Best Value: {best_value}, Best Move: {best_move}, is_maximizing: {is_maximizing}")
+        #print(f"Depth: {depth}, Best Value: {best_value}, Best Move: {best_move}, is_maximizing: {is_maximizing}")
         return best_value, best_move
 
 
