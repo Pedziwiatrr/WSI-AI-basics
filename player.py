@@ -27,12 +27,12 @@ class Player(ABC):
 
 
 class HumanPlayer(Player):
-    def get_move(self, event_position):
+    def get_move(self, event_position=None):
         return event_position
 
 
 class RandomComputerPlayer(Player):
-    def get_move(self, event_position):
+    def get_move(self, event_position=None):
         available_moves = self.game.available_moves()
         move_id = np.random.choice(len(available_moves))
         #print(available_moves[move_id])
@@ -47,7 +47,7 @@ class MinimaxComputerPlayer(Player):
         self.char = char
 
 
-    def get_move(self, event_position):
+    def get_move(self, event_position=None):
         # TODO: lab3 - implement algorithm
         current_board = self.game.board
         value, move = self.minimax(current_board, True)
@@ -74,7 +74,7 @@ class MinimaxComputerPlayer(Player):
         return board_copy
 
 
-    def evaluate_board(self, board, is_maximizing):
+    def evaluate_board(self, board):
         winner = self.game.get_winner(board)
         if winner == "" or winner == "t":
             return 0
