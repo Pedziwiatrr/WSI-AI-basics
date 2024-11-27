@@ -7,17 +7,18 @@ def build_player(player_config, game, char=None):
     assert player_config["type"] in ["human", "random", "minimax"]
 
     if player_config["type"] == "human":
-        return HumanPlayer(game)
+        return HumanPlayer(game, True)
 
     if player_config["type"] == "random":
-        return RandomComputerPlayer(game)
+        return RandomComputerPlayer(game, False)
 
     if player_config["type"] == "minimax":
         return MinimaxComputerPlayer(game, char, player_config)
 
 
 class Player(ABC):
-    def __init__(self, game):
+    def __init__(self, game, is_human):
+        self.human = is_human
         self.game = game
         self.score = 0
 
@@ -41,8 +42,9 @@ class RandomComputerPlayer(Player):
 
 class MinimaxComputerPlayer(Player):
     def __init__(self, game, char, config):
-        super().__init__(game)
+        super().__init__(game, False)
         # TODO: lab3 - load pruning depth from config
+        self.is_human = False
         self.depth = config["depth"]
         self.char = char
 
@@ -88,7 +90,7 @@ class MinimaxComputerPlayer(Player):
         best_move = None
         available_moves = self.game.available_moves(board)
         if depth == self.depth or self.game.get_winner(board) != "":
-            return self.evaluate_board(board, is_maximizing), None
+            return self.evaluate_board(board), None
 
         for move in available_moves:
             board_after_move = self.minimax_simulate_move(move, board, is_maximizing)
