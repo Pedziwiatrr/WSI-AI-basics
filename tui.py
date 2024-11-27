@@ -10,11 +10,14 @@ class GameTUI:
     def mainloop(self):
         while True:
             self.draw_board(self.game.board)
-            if self.game.get_winner() != "":
-                print(f"THE WINNER IS: {self.game.get_winner()}!!!")
+            if self.game.get_winner() in ["x", "o"]:
+                print(f"{self.game.get_winner()} wins!!!\n")
+                break
+            elif self.game.get_winner() == "t":
+                print("Its a draw!\n")
                 break
             current_player = self.player_x if self.game.player_x_turn else self.player_o
-            print(f"It is {current_player.char}'s turn!")
+            print(f"{current_player.char}'s turn!")
             if current_player.is_human:
                 row, column = self.get_human_move()
             else:
@@ -38,7 +41,6 @@ class GameTUI:
         print()
 
     def get_human_move(self):
-        print("Your turn!")
         while True:
             try:
                 row = int(input("Enter row (1-3): "))
