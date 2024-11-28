@@ -30,7 +30,8 @@ class GameTUI:
                 row, column = self.get_ai_move()
             self.place_char(row, column, current_player.char)
             self.game.player_x_turn = not self.game.player_x_turn
-            time.sleep(1)
+            if not self.endless:
+                time.sleep(1)
         self.post_match()
 
     def draw_row(self, row):
