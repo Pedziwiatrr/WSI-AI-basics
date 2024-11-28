@@ -33,7 +33,6 @@ if __name__ == "__main__":
         gui = GameGUI(game, player_x, player_o)
         gui.mainloop()
     else:
-        # TODO: lab3 - implement non-gui game simulation
         tui = GameTUI(game, player_x, player_o, config["endless"])
         tui.mainloop()
 

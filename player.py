@@ -43,14 +43,12 @@ class RandomComputerPlayer(Player):
 class MinimaxComputerPlayer(Player):
     def __init__(self, game, char, config):
         super().__init__(game, char,False)
-        # TODO: lab3 - load pruning depth from config
         self.is_human = False
         self.depth = config["depth"]
         self.char = char
 
 
     def get_move(self, event_position=None):
-        # TODO: lab3 - implement algorithm
         current_board = self.game.board
         value, move = self.minimax(current_board, True)
         if move is None:
