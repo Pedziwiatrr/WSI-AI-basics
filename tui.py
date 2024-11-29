@@ -2,15 +2,18 @@ import numpy as np
 import time
 
 class GameTUI:
-    def __init__(self, game, player_x, player_o, endless=False):
+    def __init__(self, game, player_x, player_o, endless=False, x_starting=False):
         self.game = game
         self.player_x = player_x
         self.player_o = player_o
         self.ties = 0
         self.endless = endless
+        self.x_starting = x_starting
 
     def mainloop(self):
         current_player = None
+        if self.x_starting:
+            self.game.player_x_turn = True
         while True:
             self.draw_board(self.game.board)
             if self.game.get_winner() in ["x", "o"]:

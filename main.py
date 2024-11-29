@@ -33,7 +33,7 @@ if __name__ == "__main__":
         gui = GameGUI(game, player_x, player_o)
         gui.mainloop()
     else:
-        tui = GameTUI(game, player_x, player_o, config["endless"])
+        tui = GameTUI(game, player_x, player_o, config["endless"], config["x_starting"])
         tui.mainloop()
 
 
