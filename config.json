@@ -1,13 +1,13 @@
 {
     "x": {
         "type": "minimax",
-        "depth": 5
-    },
-    "o": {
-        "type": "minimax",
         "depth": 6
     },
+    "o": {
+        "type": "human",
+        "depth": 3
+    },
     "gui": false,
-    "endless": true,
-    "x_starting": true
+    "endless": false,
+    "x_starting": false
 }
