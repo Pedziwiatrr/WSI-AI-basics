@@ -15,18 +15,29 @@ def compare_diagnoses(first_diagnosis, second_diagnosis):
 
 
 def print_results(verdicts):
+    print("=" * 100)
     total_verdicts = verdicts[0] + verdicts[1]
     print(f"Same verdicts: {verdicts[0]}")
     print(f"Different verdicts: {verdicts[1]}")
-    print(f"Algorithm accuracy: {verdicts[0] / total_verdicts}")
+    accuracy = verdicts[0] / total_verdicts
+    print(f"Algorithm accuracy: {accuracy*100:.2f}%")
+    if accuracy > 0.9:
+        print(":)")
+    else:
+        print(":(")
+    print("="*100)
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--iterations", type=int, default=300)
+    parser.add_argument("--step_length", type=float, default=0.001)
+    args = parser.parse_args()
+
     X, y = get_data([])
     data = prepare_data(X, y)
-    test_diagnosis = logistic_regression(data, 500, 0.001)
+    test_diagnosis = logistic_regression(data, args.iterations, args.step_length)
     test_results = compare_diagnoses(data[3], test_diagnosis)
     print_results(test_results)
-
 
 
 if __name__ == "__main__":
