@@ -26,4 +26,4 @@ def get_data(excluded_columns: list):
 
 def prepare_data(X, y, test_ratio: float=0.25):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_ratio, random_state=69)
-    return X_train, X_test, y_train, y_test
+    return [X_train, X_test, y_train, y_test]
