@@ -52,25 +52,27 @@ def learn(data, iterations, step_length=None):
     #print (f"len(weights): {len(weights)}")
     for i in range(iterations):
         weights, error = adjust_weights(X_train, y_train, weights, step_length)
-        if i % 1 == 0:
-            print(f"Iteration: {i}, Error: {error}")
-            print(f"Weights: {weights}\n")
+        if i % 100 == 0:
+            print(f"Iteration: {i}, Error: {error:.2f}")
+            #print(f"Weights: {weights}\n")
     return weights
 
 def predict(data, weights):
     """ use weights from learn function to diagnose cases from the rest of the data"""
     [X_train, X_test, y_train, y_test] = data
     diagnosis_list = []
+    predicted_probabilities = []
     for id, case in X_test.iterrows():
         #print(f"Current case: {case}")
         prediction = predict_value(case, weights)
+        predicted_probabilities.append(prediction)
         diagnosis = round_to_binary(prediction)
         diagnosis_list.append(diagnosis)
     #print(f"Diagnosis_list: {diagnosis_list}")
-    return diagnosis_list
+    return diagnosis_list, predicted_probabilities
 
 def logistic_regression(data, iterations, step_length=None):
     weights = learn(data, iterations, step_length)
-    diagnosis_list = predict(data, weights)
-    return diagnosis_list
+    diagnosis_list, predicted_probabilities = predict(data, weights)
+    return diagnosis_list, predicted_probabilities
 
