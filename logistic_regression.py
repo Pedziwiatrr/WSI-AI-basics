@@ -20,9 +20,9 @@ def evaluate_total_cost(X, y, weights):
     """ calculate total cost of all values in data """
     total_cost = 0
     for i in range(len(y)):
-        predicted_value = predict_value(X[i], weights)
+        predicted_value = predict_value(X.iloc[i], weights)
         # if the prediction was wrong, raise cost value (logx < 0 for x < 1 )
-        if y[i] == 1:
+        if y.iloc[i] == 1:
             total_cost -= np.log(predicted_value)
         else:
             total_cost -= np.log(1 - predicted_value)
@@ -30,21 +30,34 @@ def evaluate_total_cost(X, y, weights):
     return total_cost
 
 
-def adjust_weights(X, y, weights, step_length):
+def adjust_weights(X, y, weights, step_length=0.01):
     """ adjust weights values using gradient descent algorithm to minimize cost """
     # gradient multipliers for every features weight
     weights_gradients = [0] * len(weights)
     for i in range(len(y)):
-        predicted_value = predict_value(X[i], weights)
-        error = predicted_value - y[i]
+        predicted_value = predict_value(X.iloc[i], weights)
+        error = predicted_value - y.iloc[i]
         for j in range(len(weights)):
             # error serves a role of a derivative. Bigger error -> needs a bigger value change
-            weights_gradients[j] += error * X[i][j]
+            weights_gradients[j] += error * X.iloc[i, j]
     for i in range(len(weights)):
         # Wi = Wi - 1/n * sum(predicted_value(xi) - y)xi
         weights[i] -= step_length * weights_gradients[i] / len(y)
     return weights
 
 
+def learn(data, iterations, step_length=None):
+    [X_train, X_test, y_train, y_test] = data
+    weights = []
+    for feature in X_train:
+        weights.append(1)
+    for i in range(iterations):
+        weights = adjust_weights(X_train, y_train, weights, step_length)
+        if i % 100 == 0:
+            print(f"Iteration: {i}, Current cost: {evaluate_total_cost(X_train, y_train, weights)}")
 
+    final_cost = evaluate_total_cost(X_test, y_test, weights)
+    print(f"Final cost: {final_cost}")
 
+def logistic_regression(data, iterations, step_length=None):
+    learn(data, iterations, step_length)
