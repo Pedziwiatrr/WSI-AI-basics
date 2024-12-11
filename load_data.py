@@ -9,7 +9,12 @@ def get_data(excluded_columns: list):
 
     # data (as pandas dataframes)
     X = breast_cancer_wisconsin_diagnostic.data.features
-    chosen_columns = [col for col in X.columns if col not in excluded_columns]
+    chosen_columns = []
+    for column in X.columns:
+        if column not in excluded_columns:
+            chosen_columns.append(column)
+        else:
+            print(f"Excluding column: {column}")
     y = breast_cancer_wisconsin_diagnostic.data.targets
 
     data = X.copy()
