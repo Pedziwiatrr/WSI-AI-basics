@@ -31,9 +31,13 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--iterations", type=int, default=300)
     parser.add_argument("--step_length", type=float, default=0.001)
+    parser.add_argument("--excluded_columns", type=str, default="")
     args = parser.parse_args()
+    excluded_columns = []
+    for column in args.excluded_columns.split(","):
+        excluded_columns.append(column)
 
-    X, y = get_data([])
+    X, y = get_data(excluded_columns)
     data = prepare_data(X, y)
     test_diagnosis = logistic_regression(data, args.iterations, args.step_length)
     test_results = compare_diagnoses(data[3], test_diagnosis)
