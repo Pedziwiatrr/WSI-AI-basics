@@ -13,6 +13,12 @@ def predict_value(X, weights):
         weighted_sum += X[i] * weights[i]
     # convert predicted value to probability
     predicted_value = sigmoid(weighted_sum)
+
+    if predicted_value == 0:
+        predicted_value = 1e-6
+    elif predicted_value == 1:
+        predicted_value = 1 - 1e-6
+    #print(predicted_value)
     return predicted_value
 
 
@@ -27,6 +33,7 @@ def evaluate_total_cost(X, y, weights):
         else:
             total_cost -= np.log(1 - predicted_value)
     total_cost /= len(y)
+    #print(total_cost)
     return total_cost
 
 
@@ -55,8 +62,9 @@ def learn(data, iterations, step_length=None):
         weights = adjust_weights(X_train, y_train, weights, step_length)
         if i % 100 == 0:
             print(f"Iteration: {i}, Current cost: {evaluate_total_cost(X_train, y_train, weights)}")
+            print(f"Weights: {weights}\n")
 
-    final_cost = evaluate_total_cost(X_test, y_test, weights)
+    final_cost = evaluate_total_cost(X_train, y_train, weights)
     print(f"Final cost: {final_cost}")
 
 def logistic_regression(data, iterations, step_length=None):
