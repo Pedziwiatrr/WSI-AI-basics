@@ -1,4 +1,6 @@
 import numpy as np
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
 
 
 def round_to_binary(value):
@@ -26,7 +28,7 @@ def predict_value(X, weights):
     #print(predicted_value)
     return predicted_value
 
-def adjust_weights(X, y, weights, step_length=0.01):
+def adjust_weights(X, y, weights, step_length=0.001):
     """ adjust weights values using gradient descent algorithm to minimize cost """
     # gradient multipliers for every features weight
     weights_gradients = [0] * len(weights)
@@ -43,16 +45,16 @@ def adjust_weights(X, y, weights, step_length=0.01):
         weights[i] -= step_length * weights_gradients[i] / len(y)
     return weights, total_error
 
-def learn(data, iterations, step_length=None):
+def learn(data, iterations, step_length, normalize=False):
     """ adjust weights by minimizing the cost (diagnosis error) """
     [X_train, X_test, y_train, y_test] = data
     weights = []
     for feature in X_train:
-        weights.append(1)
+        weights.append(0)
     #print (f"len(weights): {len(weights)}")
     for i in range(iterations):
         weights, error = adjust_weights(X_train, y_train, weights, step_length)
-        if i % 100 == 0:
+        if i % 50 == 0:
             print(f"Iteration: {i}, Error: {error:.2f}")
             #print(f"Weights: {weights}\n")
     return weights
@@ -71,8 +73,8 @@ def predict(data, weights):
     #print(f"Diagnosis_list: {diagnosis_list}")
     return diagnosis_list, predicted_probabilities
 
-def logistic_regression(data, iterations, step_length=None):
-    weights = learn(data, iterations, step_length)
+def logistic_regression(data, iterations, step_length, normalize=False):
+    weights = learn(data, iterations, step_length, normalize)
     diagnosis_list, predicted_probabilities = predict(data, weights)
     return diagnosis_list, predicted_probabilities
 
