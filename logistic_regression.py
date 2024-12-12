@@ -11,6 +11,10 @@ def round_to_binary(value):
 
 def sigmoid(value):
     # converts any value to probability (in range 0 to 1)
+    if value < -300:
+        value = -300
+    elif value > 300:
+        value = 300
     return 1 / ( 1 + np.exp(-value))
 
 def predict_value(X, weights):
@@ -22,9 +26,9 @@ def predict_value(X, weights):
     predicted_value = sigmoid(weighted_sum)
 
     if predicted_value == 0:
-        predicted_value = 1e-6
+        predicted_value = 1e-10
     elif predicted_value == 1:
-        predicted_value = 1 - 1e-6
+        predicted_value = 1 - 1e-10
     #print(predicted_value)
     return predicted_value
 
@@ -43,6 +47,7 @@ def adjust_weights(X, y, weights, step_length=0.001):
     for i in range(len(weights)):
         # Wi = Wi - 1/n * sum(predicted_value(xi) - y)xi
         weights[i] -= step_length * weights_gradients[i] / len(y)
+    #print(f"Gradients: {weights_gradients}")
     return weights, total_error
 
 def learn(data, iterations, step_length, normalize=False):
