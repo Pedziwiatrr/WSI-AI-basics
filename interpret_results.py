@@ -7,7 +7,7 @@ def compare_diagnoses(true_diagnosis, suspicious_diagnosis):
     for i in range(len(true_diagnosis)):
         true_verdict = true_diagnosis.iloc[i]
         suspicious_verdict = suspicious_diagnosis[i]
-        print(f"{true_verdict} vs {suspicious_verdict}")
+        #print(f"{true_verdict} vs {suspicious_verdict}")
         if true_verdict == suspicious_verdict:
             correct += 1
         else:
