@@ -59,8 +59,8 @@ def learn(data, iterations, step_length, normalize=False):
     #print (f"len(weights): {len(weights)}")
     for i in range(iterations):
         weights, error = adjust_weights(X_train, y_train, weights, step_length)
-        if i % 50 == 1:
-            print(f"Iteration: {i}")
+        if i % 100 == 0:
+            print(f"== Iteration: {i} == ")
             #print(f"Error: {error:.2f}")
             #print(f"Weights: {weights}\n")
     return weights
