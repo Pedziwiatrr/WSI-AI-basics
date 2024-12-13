@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import MinMaxScaler
 
 
 def round_to_binary(value):
@@ -59,8 +59,9 @@ def learn(data, iterations, step_length, normalize=False):
     #print (f"len(weights): {len(weights)}")
     for i in range(iterations):
         weights, error = adjust_weights(X_train, y_train, weights, step_length)
-        if i % 1 == 0:
-            print(f"Iteration: {i}, Error: {error:.2f}")
+        if i % 50 == 1:
+            print(f"Iteration: {i}")
+            #print(f"Error: {error:.2f}")
             #print(f"Weights: {weights}\n")
     return weights
 
@@ -80,15 +81,17 @@ def predict(data, weights):
 
 def data_normalizer(data):
     [X_train, X_test, y_train, y_test] = data
-    scaler = StandardScaler()
+    # print(data[0].iloc[0])
+    scaler = MinMaxScaler()
     X_train_normalized = scaler.fit_transform(X_train)
     X_train_normalized = pd.DataFrame(X_train_normalized, columns=X_train.columns)
     X_test_normalized = scaler.transform(X_test)
     X_test_normalized = pd.DataFrame(X_test_normalized, columns=X_test.columns)
     data = [X_train_normalized, X_test_normalized, y_train, y_test]
+    #print(data[0].iloc[0])
     return data
 
-def logistic_regression(data, iterations, step_length, normalize=True):
+def logistic_regression(data, iterations, step_length, normalize=False):
     if normalize:
         data = data_normalizer(data)
     weights = learn(data, iterations, step_length, normalize)
