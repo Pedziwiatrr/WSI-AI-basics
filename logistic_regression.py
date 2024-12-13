@@ -59,7 +59,7 @@ def learn(data, iterations, step_length, normalize=False):
     #print (f"len(weights): {len(weights)}")
     for i in range(iterations):
         weights, error = adjust_weights(X_train, y_train, weights, step_length)
-        if i % 50 == 0:
+        if i % 1 == 0:
             print(f"Iteration: {i}, Error: {error:.2f}")
             #print(f"Weights: {weights}\n")
     return weights
@@ -78,7 +78,19 @@ def predict(data, weights):
     #print(f"Diagnosis_list: {diagnosis_list}")
     return diagnosis_list, predicted_probabilities
 
-def logistic_regression(data, iterations, step_length, normalize=False):
+def data_normalizer(data):
+    [X_train, X_test, y_train, y_test] = data
+    scaler = StandardScaler()
+    X_train_normalized = scaler.fit_transform(X_train)
+    X_train_normalized = pd.DataFrame(X_train_normalized, columns=X_train.columns)
+    X_test_normalized = scaler.transform(X_test)
+    X_test_normalized = pd.DataFrame(X_test_normalized, columns=X_test.columns)
+    data = [X_train_normalized, X_test_normalized, y_train, y_test]
+    return data
+
+def logistic_regression(data, iterations, step_length, normalize=True):
+    if normalize:
+        data = data_normalizer(data)
     weights = learn(data, iterations, step_length, normalize)
     diagnosis_list, predicted_probabilities = predict(data, weights)
     return diagnosis_list, predicted_probabilities
