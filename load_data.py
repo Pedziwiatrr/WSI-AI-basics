@@ -24,11 +24,12 @@ def get_data(excluded_columns: list):
     y = data['diagnosis']
 
     # convert string values to binary for our algorithm
-    y = y.replace({'M': 1, 'B': 0})
+    replace_dict = {'M': 1, 'B': 0}
+    y = y.replace(replace_dict)
 
     return X, y
 
 
-def prepare_data(X, y, test_ratio: float=0.25):
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_ratio, random_state=69)
+def prepare_data(X, y, test_ratio: float=0.25, seed=69):
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_ratio, random_state=seed)
     return [X_train, X_test, y_train, y_test]
