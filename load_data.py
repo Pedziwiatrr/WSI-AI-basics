@@ -3,7 +3,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 
 
-def get_data(excluded_columns: list):
+def get_data(excluded_columns: list = [''], included_columns: list = ['']):
     # fetch dataset
     breast_cancer_wisconsin_diagnostic = fetch_ucirepo(id=17)
 
@@ -11,10 +11,17 @@ def get_data(excluded_columns: list):
     X = breast_cancer_wisconsin_diagnostic.data.features
     chosen_columns = []
     for column in X.columns:
-        if column not in excluded_columns:
-            chosen_columns.append(column)
+        if included_columns == ['']:
+            if column not in excluded_columns:
+                chosen_columns.append(column)
+            else:
+                print(f"Excluding column: {column}")
         else:
-            print(f"Excluding column: {column}")
+            if column in included_columns:
+                chosen_columns.append(column)
+                print(f"Including column: {column}")
+    print(f"Choosing {len(chosen_columns)} columns")
+
     y = breast_cancer_wisconsin_diagnostic.data.targets
 
     data = X.copy()
