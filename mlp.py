@@ -1,3 +1,5 @@
+import numpy as np
+
 # ⣼⣿⣿⢿⡻⢝⠙⠊⠋⠉⠉⠈⠊⠝⣿⡻⠫⠫⠊⠑⠉⠉⠑⠫⢕⡫⣕⡁⠁
 # ⣼⡻⠕⠅⠁⣀⣤⣤⣄⣀⠈⠄⠁⠄⠁⣿⡮⠄⠁⠄⠄⡠⠶⠶⠦⡀⠈⣽⡢
 # ⣿⣧⠄⠁⠄⠔⠒⠭⠭⠥⠥⠓⠄⢀⣴⣿⣿⡄⠁⠠⣤⠉⠉⣭⠝⠈⢐⣽⣕
@@ -12,3 +14,29 @@
 # ⣄⠄⠁⠄⠁⠄⡎⠄⠁⢬⣮⣕⠻⢿⣿⣿⣿⣿⣿⣿⣿⣿⡫⡪⡵⠄⠁⠄⠈
 # ⣿⣄⠁⠄⠁⠄⡣⠄⠁⣷⣯⣵⣢⠄⠄⠉⠉⠉⠉⠉⠉⣠⣬⣟⡕⠄⠁⢀⣿
 # ⣿⣿⣷⡀⠁⠄⡎⠄⠁⠻⣿⣾⣯⣪⣔⢄⣀⣀⣀⡠⣶⣾⣽⣿⠃⠄⢀⣼⣿
+
+
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
+
+
+def sigmoid_derivative(x):
+    return x * (1 - x)
+
+
+class MLP:
+    def __init__(self):
+        pass
+
+    def forward(self):
+        pass
+
+    def backward(self):
+        pass
+
+    def train(self):
+        pass
+
+    def predict(self):
+        pass
+    
