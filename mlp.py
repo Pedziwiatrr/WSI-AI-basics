@@ -1,4 +1,5 @@
 import numpy as np
+from sklearn.metrics import mean_squared_error
 
 # ⣼⣿⣿⢿⡻⢝⠙⠊⠋⠉⠉⠈⠊⠝⣿⡻⠫⠫⠊⠑⠉⠉⠑⠫⢕⡫⣕⡁⠁
 # ⣼⡻⠕⠅⠁⣀⣤⣤⣄⣀⠈⠄⠁⠄⠁⣿⡮⠄⠁⠄⠄⡠⠶⠶⠦⡀⠈⣽⡢
@@ -79,8 +80,13 @@ class MLP:
     def backward(self):
         pass
 
-    def train(self):
-        pass
+    def train(self, X, y, epochs):
+        for epoch in range(epochs):
+            output = self.forward(X)
+            # self.backward()           jeszcze nie dopisalem tej funkcji
+            if (epoch + 1) % 10 == 0:
+                loss = mean_squared_error(y, output)
+                print(f"Epoch {epoch + 1}, Loss: {loss:.4f}")
 
-    def predict(self):
-        pass
+    def predict(self, X):
+        return self.forward(X)
