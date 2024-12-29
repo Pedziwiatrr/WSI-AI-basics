@@ -56,9 +56,25 @@ class MLP:
         self.weights.append(np.random.uniform(-1, 1, (layer_input_size, output_size)))
         self.biases.append(np.zeros((1, output_size)))
 
+        # dodalem to zeby warninga nie bylo, ale tak naprawde kazdy forward inicjuje wartosci od nowa
+        self.outputs = []
+        self.inputs = []
+        self.output_input = []
+        self.output = []
 
-    def forward(self):
-        pass
+    def forward(self, X):
+        self.outputs = []       # tu beda wyniki dla kazdej warstwy
+        self.inputs = []        # tu beda dane wejsciowe dla każdej warstwy (czyli sumy wazone + bias)
+        input_data = X
+        for i in range(len(self.hidden_layers)):
+            self.inputs.append(np.dot(input_data, self.weights[i]) + self.biases[i])
+            output = sigmoid(self.inputs[-1])
+            self.outputs.append(output)
+            input_data = output
+        # warstwa wyjsciowa
+        self.output_input = np.dot(input_data, self.weights[-1]) + self.biases[-1]
+        self.output = self.output_input  # brak aktywacji dla regresji
+        return self.output
 
     def backward(self):
         pass
