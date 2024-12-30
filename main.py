@@ -3,6 +3,7 @@ from sklearn.metrics import mean_squared_error
 
 from load_data import get_data, prepare_data
 from mlp import MLP
+from result_comparator import compare, compare_plot
 
 
 def main():
@@ -26,6 +27,7 @@ def main():
     output_size = 1                         # target count in y
     learning_rate = args.learning_rate
     mlp = MLP(input_size, hidden_layers, output_size, learning_rate)
+
     print("\n== Initialization parameters ==")
     print(f"Input size: {input_size}\nOutput size: {output_size}")
     print(f"Learning rate: {learning_rate}\nHidden layers: {hidden_layers}\n")
@@ -37,6 +39,8 @@ def main():
     quality_predictions = mlp.predict(X_test)
     loss = mean_squared_error(y_test, quality_predictions)
     print(f"Final loss: {loss}")
+    compare(y_test, quality_predictions, print_all=False)
+    compare_plot(y_test, quality_predictions)
 
 
 if __name__ == '__main__':
