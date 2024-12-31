@@ -14,6 +14,7 @@ def main():
     parser.add_argument('--seed', type=int, default=69)
     parser.add_argument('--test_ratio', type=float, default=0.25)
     parser.add_argument('--hidden_layers', type=int, nargs='*', default=[64, 32, 16])
+    parser.add_argument('--plot', action='store_true')
     args = parser.parse_args()
 
     # fetching data
@@ -30,17 +31,22 @@ def main():
 
     print("\n== Initialization parameters ==")
     print(f"Input size: {input_size}\nOutput size: {output_size}")
-    print(f"Learning rate: {learning_rate}\nHidden layers: {hidden_layers}\n")
+    print(f"Learning rate: {learning_rate}\nHidden layers: {hidden_layers}")
 
     # training mlp (learning phase)
+    print("\n== Training phase ==")
     mlp.train(X_train, y_train, epochs=args.epochs)
 
     # testing mlp (working phase)
+    print("\n== Testing phase ==")
     quality_predictions = mlp.predict(X_test)
     loss = mean_squared_error(y_test, quality_predictions)
-    print(f"Final loss: {loss}")
-    compare(y_test, quality_predictions, print_all=False)
-    compare_plot(y_test, quality_predictions)
+    print(f"Final loss (MSE): {loss:.4f}")
+    average_error = compare(y_test, quality_predictions, print_all=False)
+    print(f"Average quality error: {average_error:.4f}")
+    if args.plot:
+        compare_plot(y_test, quality_predictions)
+    print()
 
 
 if __name__ == '__main__':
