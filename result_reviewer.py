@@ -24,9 +24,12 @@ def test_params(X_train, X_test, y_train, y_test,
                 ):
     results = []
     param_combinations = itertools.product(epochs_list, learning_rates, hidden_layers_list)
-    print(f"== Testing {(len(epochs_list) * len(learning_rates) * len(hidden_layers_list))} combinations ==\n")
+    combination_count = len(epochs_list) * len(learning_rates) * len(hidden_layers_list)
+    print(f"== Testing {combination_count} combinations ==\n")
+    i = 0
     for epochs, learning_rate, hidden_layers in param_combinations:
-        print(f"Currently testing: epochs: {epochs}, learning_rate: {learning_rate}, hidden_layers: {hidden_layers}")
+        i += 1
+        print(f"[{i}/{combination_count}] Currently testing: epochs: {epochs}, learning_rate: {learning_rate}, hidden_layers: {hidden_layers}")
 
         input_size = X_train.shape[1]
         output_size = 1
