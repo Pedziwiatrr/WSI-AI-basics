@@ -20,7 +20,7 @@ def compare(y_test, predictions, print_all=False):
 def test_params(X_train, X_test, y_train, y_test,
                 epochs_list=[10, 100, 1000],
                 learning_rates=[0.0001, 0.00001, 0.000001],
-                hidden_layers_list=[[32], [32, 16], [64, 32, 16], [256, 128, 64, 32, 16]]
+                hidden_layers_list=[[32], [32, 16], [64, 32, 16], [256, 128, 64, 32]]
                 ):
     results = []
     param_combinations = itertools.product(epochs_list, learning_rates, hidden_layers_list)
@@ -50,5 +50,17 @@ def test_params(X_train, X_test, y_train, y_test,
 
     return results
 
+def print_results(results):
+    print("\n" + "="*75)
+    print("== TEST RESULTS ==")
+    print(f"{'Epochs':<10} {'Learning Rate':<15} {'Hidden Layers':<30} {'Loss':<10} {'Average Error':<10}")
+    print(f"{'-' * 50}")
+    for result in results:
+        print(f"{result['epochs']:<10}"
+              f"{result['learning_rate']:<15} "
+              f"{str(result['hidden_layers']):<30}"
+              f"{result['loss']:<10.4f} "
+              f"{result['average_error']:<10.4f}")
+    print("=" * 75)
 
 
