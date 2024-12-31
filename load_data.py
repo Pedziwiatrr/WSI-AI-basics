@@ -14,8 +14,9 @@ def get_data():
     return X, y
 
 
-def prepare_data(X, y, test_ratio: float=0.25, seed=69):
-    print(X.isnull().sum())
+def prepare_data(X, y, test_ratio: float=0.25, seed=69, print_features=False):
+    if print_features:
+        print(X.isnull().sum())
     X = X.fillna(X.mean())  # if any value is missing its replaced by mean of other values of this feature
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
