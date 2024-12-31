@@ -135,18 +135,18 @@ class MLP:
 
         # backpropagation
         for i in reversed(range(len(self.hidden_layers))):
-            # Gradient błędu dla bieżącej warstwy
+            # error gradients for the current hidden layer
             hidden_layer_gradients = (
                     np.dot(error_gradients_list[-1], self.weights[i + 1].T) * relu_derivative(self.inputs[i])
             )
 
-            # Gradient wag
+            # current layers weights gradients
             if i > 0:
                 layer_weights_gradients = np.dot(self.outputs[i - 1].T, hidden_layer_gradients)
             else:
                 layer_weights_gradients = np.dot(X.T, hidden_layer_gradients)
 
-            # Gradient biasów
+            # current layers bias gradients
             layer_bias_gradients = np.sum(hidden_layer_gradients, axis=0, keepdims=True)
 
             # Aktualizacja list gradientów
@@ -154,7 +154,7 @@ class MLP:
             weights_gradients_list.append(layer_weights_gradients)
             bias_gradients_list.append(layer_bias_gradients)
 
-        # Aktualizacja wag i biasów
+        # updating weights and biases in every layer
         for i in range(len(self.weights)):
             self.biases[i] -= self.learning_rate * bias_gradients_list[-(i + 1)]
             self.weights[i] -= self.learning_rate * weights_gradients_list[-(i + 1)]
@@ -163,7 +163,7 @@ class MLP:
         for epoch in range(epochs):
             output = self.forward(X)
             self.backward(X, y)
-            if (epoch + 1) % 1 == 0:
+            if (epoch + 1) % 50 == 0:
                 loss = mean_squared_error(y, output)
                 print(f"Epoch {epoch + 1}, Loss: {loss:.4f}")
 
