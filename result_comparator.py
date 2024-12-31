@@ -19,7 +19,6 @@ def compare_plot(y_test, predictions):
     true_qualities = np.array(y_test, dtype=float)
     predicted_qualities = np.array(predictions, dtype=float)
 
-    # getting every quality once for x axis
     unique_qualities = np.unique(true_qualities)
     avg_error_per_quality = []
 
@@ -31,8 +30,14 @@ def compare_plot(y_test, predictions):
             avg_error = 0
         avg_error_per_quality.append(avg_error)
 
-    plt.figure(figsize=(10, 6))
-    plt.bar(unique_qualities, avg_error_per_quality, color='red')
+    plt.figure(figsize=(8, 6))
+    bars = plt.bar(unique_qualities, avg_error_per_quality, color='red')
+
+    for bar in bars:
+        error_val = bar.get_height()
+        plt.text(bar.get_x() + bar.get_width() / 2, error_val + 0.02,
+                 round(error_val, 4), ha='center', va='bottom', fontsize=10)
+
     plt.xlabel('True Quality')
     plt.ylabel('Average error')
     plt.title('Average prediction error per quality')
