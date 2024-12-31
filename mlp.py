@@ -54,7 +54,7 @@ class MLP:
 
     def forward(self, X):
         self.outputs = []  # list of outputs for each layer
-        self.inputs = []  # Dane wejściowe dla każdej warstwy (suma ważona + bias)
+        self.inputs = []  # input data for each layer (weighted_sum + bias)
         input_data = X  # given inputs
 
         for i in range(len(self.hidden_layers)):
@@ -116,22 +116,24 @@ class MLP:
 
         error = self.output - y
         error_gradients = error
-        # error_gradients:
-        # [prediction1 - y1, prediction2 - y2, ..., predictionN - yN]
-
-        # gradients of output layer
+        # self.output shape: (samples_count) x (output_size)
+        # we set neuron_count in output layer to 1,
+        # so shape of our output is (samples_count) x 1
+        # y is just a vector of actual values
+        # so we can simply subtract one vector from another
 
         weights_gradients = np.dot(self.outputs[-1].T, error_gradients)
         # self.outputs[-1] = [output1, output2, ..., outputN]
         # weight_gradients = [output1 * error_gradients1, output2 * error_gradients2, ..., outputN * error_gradientsN]
-        bias_gradients = np.sum(error_gradients, axis=0, keepdims=True)  # Poprawne dla numpy.ndarray
+        bias_gradients = np.sum(error_gradients, axis=0, keepdims=True)
+        # bias_gradients = [[ sum_of_error_gradients ]]
 
-        # Przechowywanie gradientów
+        # we will store gradients in lists
         weights_gradients_list = [weights_gradients]
         bias_gradients_list = [bias_gradients]
         error_gradients_list = [error_gradients]
 
-        # Backpropagation przez warstwy ukryte
+        # backpropagation
         for i in reversed(range(len(self.hidden_layers))):
             # Gradient błędu dla bieżącej warstwy
             hidden_layer_gradients = (
