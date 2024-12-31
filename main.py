@@ -10,10 +10,10 @@ def main():
     # arguments parsing
     parser = argparse.ArgumentParser()
     parser.add_argument('--epochs', type=int, default=500)
-    parser.add_argument('--learning_rate', type=float, default=0.01)
+    parser.add_argument('--learning_rate', type=float, default=0.0001)
     parser.add_argument('--seed', type=int, default=69)
     parser.add_argument('--test_ratio', type=float, default=0.25)
-    parser.add_argument('--hidden_layers', type=int, nargs='*', default=[2, 1, 3])
+    parser.add_argument('--hidden_layers', type=int, nargs='*', default=[64, 32, 16])
     args = parser.parse_args()
 
     # fetching data
