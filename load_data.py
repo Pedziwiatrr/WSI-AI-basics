@@ -11,9 +11,6 @@ def get_data():
     X = wine_quality.data.features
     y = wine_quality.data.targets
 
-    print(wine_quality.metadata)
-    print(wine_quality.variables)
-
     return X, y
 
 
