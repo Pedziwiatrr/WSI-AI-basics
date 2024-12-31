@@ -1,5 +1,7 @@
 # Ćwiczenie nr 5
 
+Raport wersja robocza: https://docs.google.com/document/d/1IphqNHXyUEu-LpELAAkZe_1rHU5cLDNMLiKG6e5cLAA/edit?tab=t.0
+
 ## Treść polecenia
 
 1. Zaimplementować sieć neuronową - perceptron wielowarstwowy, oraz mechanizm jej uczenia algorytmem propagacji
