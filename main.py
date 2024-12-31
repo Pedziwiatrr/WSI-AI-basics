@@ -3,7 +3,7 @@ from sklearn.metrics import mean_squared_error
 
 from load_data import get_data, prepare_data
 from mlp import MLP
-from result_reviewer import compare, test_params
+from result_reviewer import compare, test_params, print_results
 from plotter import error_plot
 
 
@@ -51,7 +51,7 @@ def main():
             error_plot(y_test, quality_predictions)
     else:
         test_results = test_params(X_train, X_test, y_train, y_test)
-        print(test_results)
+        print_results(test_results)
     print()
 
 
