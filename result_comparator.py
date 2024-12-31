@@ -11,7 +11,8 @@ def compare(y_test, predictions, print_all=False):
         if print_all:
             print(f"True Quality: {true_quality} // Predicted Quality: {predicted_quality} // Difference: {error}")
         total_error += error
-    print(f"\n== Average prediction error: {total_error / y_test.shape[0]} ==")
+    average_error = float(total_error / y_test.shape[0])
+    return average_error
 
 
 def compare_plot(y_test, predictions):
