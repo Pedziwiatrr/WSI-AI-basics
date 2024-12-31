@@ -149,7 +149,7 @@ class MLP:
             # current layers bias gradients
             layer_bias_gradients = np.sum(hidden_layer_gradients, axis=0, keepdims=True)
 
-            # Aktualizacja list gradientów
+            # updating lists with gradients for all layers with current layer gradients values
             error_gradients_list.append(hidden_layer_gradients)
             weights_gradients_list.append(layer_weights_gradients)
             bias_gradients_list.append(layer_bias_gradients)
@@ -163,9 +163,9 @@ class MLP:
         for epoch in range(epochs):
             output = self.forward(X)
             self.backward(X, y)
-            if (epoch + 1) % 50 == 0:
+            if (epoch + 1) % 100 == 0:
                 loss = mean_squared_error(y, output)
-                print(f"Epoch {epoch + 1}, Loss: {loss:.4f}")
+                print(f"    Epoch {epoch + 1}, Loss: {loss:.4f}")
 
     def predict(self, X):
         return np.round(self.forward(X))
