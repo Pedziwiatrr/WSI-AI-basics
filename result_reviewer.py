@@ -4,6 +4,10 @@ import numpy as np
 from mlp import MLP
 
 
+test_epochs = [10, 100, 1000, 2500]
+test_learning_rates = [0.0001, 0.00001, 0.000001, 0.0000001]
+test_hidden_layers = [[11], [32, 16], [64, 32, 16], [256, 128, 64, 32]]
+
 def compare(y_test, predictions, print_all=False):
     true_quality = np.array(y_test, dtype=float)
     predicted_quality = np.array(predictions, dtype=float)
@@ -18,9 +22,9 @@ def compare(y_test, predictions, print_all=False):
 
 
 def test_params(X_train, X_test, y_train, y_test,
-                epochs_list=[10, 100, 1000],
-                learning_rates=[0.0001, 0.00001, 0.000001],
-                hidden_layers_list=[[32], [32, 16], [64, 32, 16], [256, 128, 64, 32]]
+                epochs_list=test_epochs,
+                learning_rates=test_learning_rates,
+                hidden_layers_list=test_hidden_layers
                 ):
     results = []
     param_combinations = itertools.product(epochs_list, learning_rates, hidden_layers_list)
