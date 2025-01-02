@@ -1,12 +1,14 @@
 import itertools
 from sklearn.metrics import mean_squared_error
 import numpy as np
+import pandas as pd
 from mlp import MLP
 
 
 test_epochs = [10, 100, 1000, 2500]
 test_learning_rates = [0.0001, 0.00001, 0.000001, 0.0000001]
-test_hidden_layers = [[11], [32, 16], [64, 32, 16], [256, 128, 64, 32]]
+test_hidden_layers = [[4, 2], [4, 4, 4], [8, 4, 2], [16, 16, 16], [16, 8, 4, 2]]
+
 
 def compare(y_test, predictions, print_all=False):
     true_quality = np.array(y_test, dtype=float)
@@ -24,7 +26,8 @@ def compare(y_test, predictions, print_all=False):
 def test_params(X_train, X_test, y_train, y_test,
                 epochs_list=test_epochs,
                 learning_rates=test_learning_rates,
-                hidden_layers_list=test_hidden_layers
+                hidden_layers_list=test_hidden_layers,
+                save_location="tests/test_results.csv"
                 ):
     results = []
     param_combinations = itertools.product(epochs_list, learning_rates, hidden_layers_list)
@@ -52,7 +55,11 @@ def test_params(X_train, X_test, y_train, y_test,
             "average_error": average_error
         })
 
+    data_frame = pd.DataFrame(results)
+    data_frame.to_csv(save_location, index=False)
+
     return results
+
 
 def print_results(results):
     print("\n" + "="*75)
