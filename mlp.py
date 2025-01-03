@@ -169,4 +169,4 @@ class MLP:
                 print(f"    Epoch {epoch + 1}, Loss: {loss:.4f}")
 
     def predict(self, X):
-        return self.forward(X)
+        return np.round(self.forward(X))
