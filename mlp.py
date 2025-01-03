@@ -115,7 +115,6 @@ class MLP:
         y = np.asarray(y)
 
         error = ( self.output - y ) / y.shape[0]
-        print(error)
         error_gradients = error
         # self.output shape: (samples_count) x (output_size)
         # we set neuron_count in output layer to 1,
