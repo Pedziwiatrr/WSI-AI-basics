@@ -114,7 +114,8 @@ class MLP:
         X = np.asarray(X)
         y = np.asarray(y)
 
-        error = self.output - y
+        error = ( self.output - y ) / y.shape[0]
+        print(error)
         error_gradients = error
         # self.output shape: (samples_count) x (output_size)
         # we set neuron_count in output layer to 1,
@@ -168,4 +169,4 @@ class MLP:
                 print(f"    Epoch {epoch + 1}, Loss: {loss:.4f}")
 
     def predict(self, X):
-        return np.round(self.forward(X))
+        return self.forward(X)
