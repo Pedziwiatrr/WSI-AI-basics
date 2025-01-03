@@ -5,9 +5,9 @@ import pandas as pd
 from mlp import MLP
 
 
-test_epochs = [10, 100, 1000, 2500]
-test_learning_rates = [0.0001, 0.00001, 0.000001, 0.0000001]
-test_hidden_layers = [[4, 2], [4, 4, 4], [8, 4, 2], [16, 16, 16], [16, 8, 4, 2]]
+test_epochs = [ 100, 1000, 2500, 10000]
+test_learning_rates = [0.1, 0.05, 0.001, 0.0001]
+test_hidden_layers = [[4, 2], [4, 4, 4], [8, 4, 2], [16, 8, 4, 2]]
 
 
 def compare(y_test, predictions, print_all=False):
