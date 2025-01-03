@@ -7,6 +7,7 @@ def relu(x):
 
 def relu_derivative(x):
     return (x > 0).astype(float)
+    # it has to be float due to compatibility with other computations
 
 class MLP:
     def __init__(self, input_size, hidden_layers, output_size=1, learning_rate=0.01):
@@ -114,7 +115,7 @@ class MLP:
         X = np.asarray(X)
         y = np.asarray(y)
 
-        error = ( self.output - y ) / y.shape[0]
+        error = (self.output - y) / y.shape[0]
         error_gradients = error
         # self.output shape: (samples_count) x (output_size)
         # we set neuron_count in output layer to 1,
@@ -138,6 +139,13 @@ class MLP:
             # error gradients for the current hidden layer
             hidden_layer_gradients = (
                     np.dot(error_gradients_list[-1], self.weights[i + 1].T) * relu_derivative(self.inputs[i])
+                    # error_gradients_list[-1] - error gradient for next layer
+                    # shape: (samples_count, neurons_count_in_next_layer)
+                    # self.weights[i + 1].T - transposed weights, which connect current layer with the next one
+                    # shape: (neurons_count_in_next_layer, neuron_count_in_current_layer)
+                    # np.dot computes weighted sum of error gradients
+                    # we also multiply it by relu_derivative to make sure that
+                    # any of "dead" neurons isn't suddenly "alive"
             )
 
             # current layers weights gradients
