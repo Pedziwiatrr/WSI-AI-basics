@@ -39,9 +39,14 @@ def error_plot(y_test, predictions):
 
 def compare_loss_plot(results):
     matplotlib.use('TkAgg')
-    epochs_list = [result['epochs'] for result in results]
-    test_losses = [result['test_loss'] for result in results]
-    train_losses = [result['train_loss'] for result in results]
+
+    first_results = [result for result in results
+        if result['learning_rate'] == results[0]['learning_rate'] and result['hidden_layers'] == results[0]['hidden_layers']
+    ]
+
+    epochs_list = [result['epochs'] for result in first_results]
+    test_losses = [result['test_loss'] for result in first_results]
+    train_losses = [result['train_loss'] for result in first_results]
     plt.ylim(0, min(max(test_losses), max(train_losses), 5))
 
     plt.plot(epochs_list, test_losses, label='Test Loss', color='r')
