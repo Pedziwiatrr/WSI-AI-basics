@@ -115,24 +115,23 @@ class MLP:
         X = np.asarray(X)
         y = np.asarray(y)
 
-        error = ( self.output - y ) / y.shape[0]
-        error_gradients = error
+        output_error_gradients = ( self.output - y ) / y.shape[0]
         # self.output shape: (samples_count) x (output_size)
         # we set neuron_count in output layer to 1,
         # so shape of our output is (samples_count) x 1
         # y is just a vector of actual values
         # so we can simply subtract one vector from another
 
-        weights_gradients = np.dot(self.outputs[-1].T, error_gradients)
+        weights_gradients = np.dot(self.outputs[-1].T, output_error_gradients)
         # self.outputs[-1] = [output1, output2, ..., outputN]
         # weight_gradients = [output1 * error_gradients1, output2 * error_gradients2, ..., outputN * error_gradientsN]
-        bias_gradients = np.sum(error_gradients, axis=0, keepdims=True)
+        bias_gradients = np.sum(output_error_gradients, axis=0, keepdims=True)
         # bias_gradients = [[ sum_of_error_gradients ]]
 
         # we will store gradients in lists
         weights_gradients_list = [weights_gradients]
         bias_gradients_list = [bias_gradients]
-        error_gradients_list = [error_gradients]
+        error_gradients_list = [output_error_gradients]
 
         # backpropagation
         for i in reversed(range(len(self.hidden_layers))):
@@ -152,10 +151,10 @@ class MLP:
             if i > 0:
                 layer_weights_gradients = np.dot(self.outputs[i - 1].T, layer_error_gradients)
             else:
-                layer_weights_gradients = np.dot(X.T, hidden_layer_gradients)
+                layer_weights_gradients = np.dot(X.T, layer_error_gradients)
 
             # current layers bias gradients
-            layer_bias_gradients = np.sum(hidden_layer_gradients, axis=0, keepdims=True)
+            layer_bias_gradients = np.sum(layer_error_gradients, axis=0, keepdims=True)
 
             # updating lists with gradients for all layers with current layer gradients values
             error_gradients_list.append(layer_error_gradients)
@@ -176,4 +175,4 @@ class MLP:
                 print(f"    Epoch {epoch + 1}, Loss: {loss:.4f}")
 
     def predict(self, X):
-        return np.round(self.forward(X))
+        return self.forward(X)
