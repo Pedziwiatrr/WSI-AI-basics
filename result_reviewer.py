@@ -5,9 +5,9 @@ import pandas as pd
 from mlp import MLP
 
 
-test_epochs = [ 100, 1000, 2500, 10000]
-test_learning_rates = [0.1, 0.05, 0.001, 0.0001]
-test_hidden_layers = [[4, 2], [4, 4, 4], [8, 4, 2], [16, 8, 4, 2]]
+test_epochs = list(range(100, 10001, 100))
+test_learning_rates = [0.1] # 0.05, 0.001, 0.0001]
+test_hidden_layers = [[4, 2],] # [4, 4, 4], [8, 4, 2], [16, 8, 4, 2]]
 
 
 def compare(y_test, predictions, print_all=False):
@@ -44,15 +44,19 @@ def test_params(X_train, X_test, y_train, y_test,
 
         mlp.train(X_train, y_train, epochs)
 
-        quality_predictions = mlp.predict(X_test)
-        loss = mean_squared_error(y_test, quality_predictions)
-        average_error = compare(y_test, quality_predictions, print_all=False)
+        train_quality_predictions = mlp.predict(X_train)
+        train_loss = mean_squared_error(y_train, train_quality_predictions)
+        test_quality_predictions = mlp.predict(X_test)
+        test_loss = mean_squared_error(y_test, test_quality_predictions)
+        average_error = compare(y_test, test_quality_predictions, print_all=False)
+
         results.append({
             "epochs": epochs,
             "learning_rate": learning_rate,
             "hidden_layers": hidden_layers,
-            "loss": loss,
-            "average_error": average_error
+            "train_loss": train_loss,
+            "test_loss": test_loss,
+            "test_average_error": average_error
         })
 
     data_frame = pd.DataFrame(results)
@@ -60,18 +64,17 @@ def test_params(X_train, X_test, y_train, y_test,
 
     return results
 
-
 def print_results(results):
     print("\n" + "="*75)
     print("== TEST RESULTS ==")
-    print(f"{'Epochs':<10} {'Learning Rate':<15} {'Hidden Layers':<30} {'Loss':<10} {'Average Error':<10}")
+    print(f"{'Epochs':<10} {'Learning Rate':<15} {'Hidden Layers':<30} {'Train Loss':<20} {'Test Loss':<20} {'Average Test Error':<20}")
     print(f"{'-' * 50}")
     for result in results:
         print(f"{result['epochs']:<10}"
               f"{result['learning_rate']:<15} "
               f"{str(result['hidden_layers']):<30}"
-              f"{result['loss']:<10.4f} "
-              f"{result['average_error']:<10.4f}")
+              f"{result['train_loss']:<20.4f} "
+              f"{result['test_loss']:<20.4f} "
+              f"{result['test_average_error']:<20.4f}")
     print("=" * 75)
-
 
