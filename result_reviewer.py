@@ -5,9 +5,9 @@ import pandas as pd
 from mlp import MLP
 
 
-test_epochs = list(range(100, 10001, 100))
-test_learning_rates = [0.1] # 0.05, 0.001, 0.0001]
-test_hidden_layers = [[4, 2],] # [4, 4, 4], [8, 4, 2], [16, 8, 4, 2]]
+TEST_EPOCHS = sorted([ 100, 1000, 2500, 10000, 20000])
+TEST_LEARNING_RATES = [0.1, 0.05, 0.01, 0.001]
+TEST_HIDDEN_LAYERS = [[4, 2], [4, 4, 4], [8, 4, 2], [16, 8, 4, 2]]
 
 
 def compare(y_test, predictions, print_all=False):
@@ -24,9 +24,9 @@ def compare(y_test, predictions, print_all=False):
 
 
 def test_params(X_train, X_test, y_train, y_test,
-                epochs_list=test_epochs,
-                learning_rates=test_learning_rates,
-                hidden_layers_list=test_hidden_layers,
+                epochs_list=TEST_EPOCHS,
+                learning_rates=TEST_LEARNING_RATES,
+                hidden_layers_list=TEST_HIDDEN_LAYERS,
                 save_location="tests/test_results.csv"
                 ):
     results = []
@@ -65,7 +65,7 @@ def test_params(X_train, X_test, y_train, y_test,
     return results
 
 def print_results(results):
-    print("\n" + "="*75)
+    print("\n" + "="*110)
     print("== TEST RESULTS ==")
     print(f"{'Epochs':<10} {'Learning Rate':<15} {'Hidden Layers':<30} {'Train Loss':<20} {'Test Loss':<20} {'Average Test Error':<20}")
     print(f"{'-' * 50}")
@@ -76,5 +76,5 @@ def print_results(results):
               f"{result['train_loss']:<20.4f} "
               f"{result['test_loss']:<20.4f} "
               f"{result['test_average_error']:<20.4f}")
-    print("=" * 75)
+    print("=" * 110)
 
