@@ -41,7 +41,7 @@ class MLP:
             # ]
             # it means that first neuron's set of weight is [0.15, 0.12, 0.88, 0.99]
             # second one has [0.4, 0.3, 1.2, 0.5] and third one [0.8, 0.2, 1.3, 0.3]
-            self.weights.append(np.random.uniform(-0.1, 0.1, (layer_input_size, hidden_size)))
+            self.weights.append(np.random.uniform(0.1, 0.2, (layer_input_size, hidden_size)))
             # every neuron in layer has one bias, so for every layer
             # biases are represented by vector of values, for example:
             # [0.12, 0.15, 0.9]
@@ -50,7 +50,7 @@ class MLP:
             # every single bias is initialized as 0
             layer_input_size = hidden_size
         # initialization of output layer
-        self.weights.append(np.random.uniform(-0.1, 0.1, (layer_input_size, output_size)))
+        self.weights.append(np.random.uniform(0.1, 0.2, (layer_input_size, output_size)))
         self.biases.append(np.zeros((1, output_size)))
 
     def forward(self, X):
