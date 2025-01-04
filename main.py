@@ -4,7 +4,7 @@ from sklearn.metrics import mean_squared_error
 from load_data import get_data, prepare_data
 from mlp import MLP
 from result_reviewer import compare, test_params, print_results
-from plotter import error_plot
+from plotter import error_plot, compare_loss_plot
 
 
 def main():
@@ -52,6 +52,8 @@ def main():
     else:
         test_results = test_params(X_train, X_test, y_train, y_test)
         print_results(test_results)
+        if args.plot:
+            compare_loss_plot(test_results)
     print()
 
 
