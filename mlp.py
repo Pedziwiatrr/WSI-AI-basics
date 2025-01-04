@@ -7,6 +7,7 @@ def relu(x):
 
 def relu_derivative(x):
     return (x > 0).astype(float)
+    # it has to be float due to compatibility with other computations
 
 class MLP:
     def __init__(self, input_size, hidden_layers, output_size=1, learning_rate=0.01):
@@ -114,39 +115,47 @@ class MLP:
         X = np.asarray(X)
         y = np.asarray(y)
 
-        output_error_gradients =  ( self.output - y ) / y.shape[0]
+        error = ( self.output - y ) / y.shape[0]
+        error_gradients = error
         # self.output shape: (samples_count) x (output_size)
         # we set neuron_count in output layer to 1,
         # so shape of our output is (samples_count) x 1
         # y is just a vector of actual values
         # so we can simply subtract one vector from another
 
-        weights_gradients = np.dot(self.outputs[-1].T, output_error_gradients)
+        weights_gradients = np.dot(self.outputs[-1].T, error_gradients)
         # self.outputs[-1] = [output1, output2, ..., outputN]
-        # weight_gradients = [output1 * output_error_gradients1, output2 * output_error_gradients2, ..., outputN * output_error_gradientsN]
-        bias_gradients = np.sum(output_error_gradients, axis=0, keepdims=True)
-        # bias_gradients = [[ sum_of_output_error_gradients ]]
+        # weight_gradients = [output1 * error_gradients1, output2 * error_gradients2, ..., outputN * error_gradientsN]
+        bias_gradients = np.sum(error_gradients, axis=0, keepdims=True)
+        # bias_gradients = [[ sum_of_error_gradients ]]
 
         # we will store gradients in lists
         weights_gradients_list = [weights_gradients]
         bias_gradients_list = [bias_gradients]
-        error_gradients_list = [output_error_gradients]
+        error_gradients_list = [error_gradients]
 
         # backpropagation
         for i in reversed(range(len(self.hidden_layers))):
             # error gradients for the current hidden layer
             layer_error_gradients = (
                     np.dot(error_gradients_list[-1], self.weights[i + 1].T) * relu_derivative(self.inputs[i])
+                    # error_gradients_list[-1] - error gradient for next layer
+                    # shape: (samples_count, neurons_count_in_next_layer)
+                    # self.weights[i + 1].T - transposed weights, which connect current layer with the next one
+                    # shape: (neurons_count_in_next_layer, neuron_count_in_current_layer)
+                    # np.dot computes weighted sum of error gradients
+                    # we also multiply it by relu_derivative to make sure that
+                    # any of "dead" neurons isn't suddenly "alive"
             )
 
             # current layers weights gradients
             if i > 0:
                 layer_weights_gradients = np.dot(self.outputs[i - 1].T, layer_error_gradients)
             else:
-                layer_weights_gradients = np.dot(X.T, layer_error_gradients)
+                layer_weights_gradients = np.dot(X.T, hidden_layer_gradients)
 
             # current layers bias gradients
-            layer_bias_gradients = np.sum(layer_error_gradients, axis=0, keepdims=True)
+            layer_bias_gradients = np.sum(hidden_layer_gradients, axis=0, keepdims=True)
 
             # updating lists with gradients for all layers with current layer gradients values
             error_gradients_list.append(layer_error_gradients)
@@ -167,4 +176,4 @@ class MLP:
                 print(f"    Epoch {epoch + 1}, Loss: {loss:.4f}")
 
     def predict(self, X):
-        return self.forward(X)
+        return np.round(self.forward(X))
