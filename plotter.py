@@ -1,7 +1,9 @@
 import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
 
 def error_plot(y_test, predictions):
+    matplotlib.use('TkAgg')
     true_qualities = np.array(y_test, dtype=float)
     predicted_qualities = np.array(predictions, dtype=float)
 
@@ -34,3 +36,22 @@ def error_plot(y_test, predictions):
     plt.xticks(unique_qualities, count_labels,)
     plt.grid(axis='y')
     plt.show()
+
+def compare_loss_plot(results):
+    matplotlib.use('TkAgg')
+    plt.ylim(0, 1)
+    epochs_list = [result['epochs'] for result in results]
+    test_losses = [result['test_loss'] for result in results]
+    train_losses = [result['train_loss'] for result in results]
+
+    plt.plot(epochs_list, test_losses, label='Test Loss', color='r')
+    plt.plot(epochs_list, train_losses, label='Train Loss',  color='b')
+
+    plt.xlabel('Epochs', fontsize=14, labelpad=20)
+    plt.ylabel('Loss', fontsize=14)
+    plt.title('Loss in train/test samples', fontsize=18)
+    plt.legend()
+    plt.show()
+
+
+
