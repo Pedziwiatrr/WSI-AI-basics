@@ -1,7 +1,11 @@
-# WSI - laboratoria
+# Ćwiczenie nr 6
 
-**Michał Pędziwiatr**
+## Treść polecenia
 
-**nr indeksu: 331421**
+1. Zaimplementować algorytm Q-learning, a następnie użyć go do wytrenowania agenta rozwiązującego problem Cliff Walking
+[https://gymnasium.farama.org/environments/toy_text/cliff_walking/](https://gymnasium.farama.org/environments/toy_text/cliff_walking/)
+2. Stworzyć wizualizację wyuczonej polityki i umieścić ją w sprawozdaniu. Wzór wizualizacji [https://gymnasium.farama.org/tutorials/training_agents/FrozenLake_tuto/#visualization](https://gymnasium.farama.org/tutorials/training_agents/FrozenLake_tuto/#visualization) 
 
-**nr grupy: 104**
+## Uwagi 
+
+- Nie należy implementować środowiska samemu - tworzymy je wywołaniem `gymnasium.make("CliffWalking-v0")`
