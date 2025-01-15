@@ -1,7 +1,7 @@
 import argparse
 import gymnasium as gym
 from cliff_walking import q_learn
-from visualizer import postprocess, plot_q_values_map, plot_states_actions_distribution
+from visualizer import reward_plot, postprocess, plot_q_values_map, plot_states_actions_distribution
 
 
 def main():
@@ -19,10 +19,9 @@ def main():
     episodes = list(range(1, args.episodes + 1))
     results, summary = postprocess(episodes, rewards_list, steps_list)
 
-    results.to_csv('qlearning_results.csv', index=False)
-
-    plot_q_values_map(Q, environment, "q_values_map.png")
-    plot_states_actions_distribution(states, actions)
+    reward_plot(episodes, rewards_list, 'plots/reward_plot.png')
+    plot_q_values_map(Q, environment, "plots/q_values_map.png")
+    plot_states_actions_distribution(states, actions, 'plots/states_actions_distribution.png')
 
 if __name__ == '__main__':
     main()
