@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def q_learn(environment, episode_count=10, max_steps=1000, beta=0.8, gamma=0.1, epsilon=0.2):
     episode = 0
     # Q will store possible rewards for every action in every state. We dont know the values yet so right now its just np.zeros
@@ -36,7 +37,7 @@ def choose_action(Q, state, epsilon, possible_actions):
         # exploration: trying out new actions that are not yet explored
         action = np.random.choice(possible_actions)
     else:
-        # exploatation: choosing the best explored action
+        # exploitation: choosing the best explored action
         action = np.argmax(Q[state, :])
     return action
 
