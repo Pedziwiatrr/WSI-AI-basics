@@ -15,8 +15,8 @@ sns.set_theme()
 
 
 def reward_plot(episodes, rewards, savefig_file='plots/reward_plot.png'):
-    plt.figure(figsize=(10, 5))
-    plt.plot(episodes, rewards, marker='o', linestyle='-', color='b')
+    plt.figure(figsize=(15, 5))
+    plt.plot(episodes, rewards, linestyle='-', color='b')
     plt.title('Reward over Episodes')
     plt.xlabel('Episode')
     plt.ylabel('Reward')
@@ -50,8 +50,6 @@ def qtable_directions_map(qtable):
 
 def plot_states_actions_distribution(states, actions, savefig_file='plots/states_actions_distribution.png'):
     labels = {"LEFT": 0, "DOWN": 1, "RIGHT": 2, "UP": 3}
-    print(f'actions: {actions}')
-    print(f'states: {states}')
     fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(15, 5))
     sns.histplot(data=states, ax=ax[0], kde=True)
     ax[0].set_title("States")
