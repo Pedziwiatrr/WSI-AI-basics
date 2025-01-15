@@ -14,6 +14,14 @@ from gymnasium.envs.toy_text.frozen_lake import generate_random_map
 sns.set_theme()
 
 
+def reward_plot(episodes, rewards, savefig_file='plots/reward_plot.png'):
+    plt.figure(figsize=(10, 5))
+    plt.plot(episodes, rewards, marker='o', linestyle='-', color='b')
+    plt.title('Reward over Episodes')
+    plt.xlabel('Episode')
+    plt.ylabel('Reward')
+    plt.grid(True)
+    plt.savefig(savefig_file)
 
 def postprocess(episodes, rewards, steps):
     res = pd.DataFrame(
@@ -40,7 +48,7 @@ def qtable_directions_map(qtable):
     return qtable_val_max, qtable_directions
 
 
-def plot_states_actions_distribution(states, actions):
+def plot_states_actions_distribution(states, actions, savefig_file='plots/states_actions_distribution.png'):
     labels = {"LEFT": 0, "DOWN": 1, "RIGHT": 2, "UP": 3}
     print(f'actions: {actions}')
     print(f'states: {states}')
@@ -51,12 +59,10 @@ def plot_states_actions_distribution(states, actions):
     ax[1].set_xticks(list(labels.values()), labels=labels.keys())
     ax[1].set_title("Actions")
     fig.tight_layout()
-
-    fig.savefig("cliffwalking_states_actions_distribution.png", bbox_inches="tight")
-    plt.show()
+    fig.savefig(savefig_file, bbox_inches="tight")
 
 
-def plot_q_values_map(qtable, env, savefig_folder="q_values_map.png"):
+def plot_q_values_map(qtable, env, savefig_file="q_values_map.png"):
     qtable_val_max, qtable_directions = qtable_directions_map(qtable)
 
     fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(15, 5))
@@ -81,10 +87,7 @@ def plot_q_values_map(qtable, env, savefig_folder="q_values_map.png"):
         spine.set_visible(True)
         spine.set_linewidth(0.7)
         spine.set_color("black")
-
-    img_title = f"cliffwalking_q_values.png"
-    fig.savefig(savefig_folder, bbox_inches="tight")
-    plt.show()
+    fig.savefig(savefig_file, bbox_inches="tight")
 
 
 
