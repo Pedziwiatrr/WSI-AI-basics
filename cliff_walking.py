@@ -8,9 +8,9 @@ def q_learn(environment, episode_count=10, max_steps=1000, beta=0.8, gamma=0.1, 
     rewards_list = []
     steps_list = []
     while episode < episode_count:
+        state, info = environment.reset()
+        steps = 0
         sum_reward = 0
-        state, info = environment.reset(return_info=True)
-        steps = 0                                                                                   # t ← 0
         while steps < max_steps:
             action = choose_action(Q, state, epsilon, environment.action_space.n)                   # at ← choose action (xt,Qt)
             next_state, reward, terminated, truncated, info = environment.step(action)              # rt, xt+1 ← do at
@@ -18,14 +18,15 @@ def q_learn(environment, episode_count=10, max_steps=1000, beta=0.8, gamma=0.1, 
             # delta will store the error between our current state and the next state
             # predicted future reward is discounted by gamma because
             # we don't want it to impact our decisions too much as it might be incorrect.
-            delta = reward + gamma * np.max(Q[next_state, :]) - Q[state, action]                    # ∆ ← rt + γ max Qt(xt+1,a) − Qt(xt,at)
+            delta = reward + gamma * np.max(Q[next_state, :]) - Q[state, action]  # ∆ ← rt + γ max Qt(xt+1,a) − Qt(xt,at)
             Q[state, action] += beta * delta                                                        # Qt+1 ← Qt + β∆
 
             state = next_state
             sum_reward += reward
             steps += 1                                                                              # t ← t + 1
             if steps % 100 == 0:
-                print(f' Step: {steps} | Reward sum: {sum_reward}')
+                #print(f' Step: {steps} | Reward sum: {sum_reward}')
+                pass
 
             if terminated or truncated:
                 break
