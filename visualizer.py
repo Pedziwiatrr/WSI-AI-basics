@@ -1,25 +1,26 @@
-from pathlib import Path
-from typing import NamedTuple
-
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from tqdm import tqdm
-
-import gymnasium as gym
-from gymnasium.envs.toy_text.frozen_lake import generate_random_map
-
+from sklearn.linear_model import LinearRegression
 
 sns.set_theme()
 
 
 def reward_plot(episodes, rewards, savefig_file='plots/reward_plot.png'):
     plt.figure(figsize=(15, 5))
-    plt.plot(episodes, rewards, linestyle='-', color='b')
+    plt.plot(episodes, rewards, linestyle='-', color='b', label='Reward')
+
+    model = LinearRegression()
+    model.fit(np.array(episodes).reshape(-1, 1), rewards)
+    trend = model.predict(np.array(episodes).reshape(-1, 1))
+    plt.plot(episodes, trend, linestyle='-', color='r', label='Trend Line')
+
     plt.title('Reward over Episodes')
     plt.xlabel('Episode')
     plt.ylabel('Reward')
+    plt.ylim(-1000)
+    plt.legend()
     plt.grid(True)
     plt.savefig(savefig_file)
 
