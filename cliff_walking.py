@@ -1,12 +1,18 @@
 import numpy as np
 
 
+
 def q_learn(environment, episode_count=10, max_steps=1000, beta=0.8, gamma=0.1, epsilon=0.2):
     episode = 0
     # Q will store possible rewards for every action in every state. We don't know the values yet so right now its just np.zeros
-    Q = np.zeros((environment.observation_space.n, environment.action_space.n))                 # Q ← init
+    Q = np.zeros((environment.observation_space.n, environment.action_space.n))                     # Q ← init
+
+    # values history needed for visualization
     rewards_list = []
     steps_list = []
+    states = []
+    actions = []
+
     while episode < episode_count:
         state, info = environment.reset()
         steps = 0
@@ -24,19 +30,20 @@ def q_learn(environment, episode_count=10, max_steps=1000, beta=0.8, gamma=0.1, 
             state = next_state
             sum_reward += reward
             steps += 1                                                                              # t ← t + 1
-            if steps % 100 == 0:
-                #print(f' Step: {steps} | Reward sum: {sum_reward}')
-                pass
+
+            states.append(state)
+            actions.append(action)
 
             if terminated or truncated:
                 break
 
         episode += 1
+
         rewards_list.append(sum_reward)
         steps_list.append(steps)
         print(f'>> Finished episode: {episode}, steps: {steps}, Reward sum: {sum_reward} <<')
 
-    return Q, rewards_list, steps_list
+    return Q, rewards_list, steps_list, states, actions
 
 
 def choose_action(Q, state, epsilon, possible_actions):
