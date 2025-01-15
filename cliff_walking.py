@@ -5,6 +5,8 @@ def q_learn(environment, episode_count=10, max_steps=1000, beta=0.8, gamma=0.1, 
     episode = 0
     # Q will store possible rewards for every action in every state. We don't know the values yet so right now its just np.zeros
     Q = np.zeros((environment.observation_space.n, environment.action_space.n))                 # Q ← init
+    rewards_list = []
+    steps_list = []
     while episode < episode_count:
         sum_reward = 0
         state, info = environment.reset(return_info=True)
@@ -29,7 +31,11 @@ def q_learn(environment, episode_count=10, max_steps=1000, beta=0.8, gamma=0.1, 
                 break
 
         episode += 1
+        rewards_list.append(sum_reward)
+        steps_list.append(steps)
         print(f'>> Finished episode: {episode}, steps: {steps}, Reward sum: {sum_reward} <<')
+
+    return Q, rewards_list, steps_list
 
 
 def choose_action(Q, state, epsilon, possible_actions):
