@@ -1,7 +1,7 @@
 import argparse
 import gymnasium as gym
 from cliff_walking import q_learn
-from visualizer import reward_plot, postprocess, plot_q_values_map, plot_states_actions_distribution, analyze_rewards
+from visualizer import reward_plot, postprocess, plot_q_values_map, plot_states_actions_distribution, analyze_rewards, print_states, print_actions
 
 
 def main():
@@ -11,6 +11,7 @@ def main():
     parser.add_argument('--epsilon', type=float, default=0.0001)
     parser.add_argument('--beta', type=float, default=0.1)
     parser.add_argument('--gamma', type=float, default=0.9)
+    parser.add_argument("--additional_data", action="store_true")
     args = parser.parse_args()
 
     environment = gym.make("CliffWalking-v0", render_mode="rgb_array")
@@ -29,6 +30,9 @@ def main():
     print(f"    Average reward: {average_reward:.3f}")
     print(f"    Average reward in last 100 episodes: {average_reward_last_100:.3f}")
     print(f"    Best reward: {best_reward}  (Best possible: -13)")
+    if args.additional_data:
+        print_states(states)
+        print_actions(actions)
     print(">======================================================<")
 
     reward_plot(list(range(1, args.episodes + 1)), rewards_list, 'plots/reward_plot.png')
