@@ -35,7 +35,7 @@ def main():
         print_actions(actions)
     print(">======================================================<")
 
-    reward_plot(list(range(1, args.episodes + 1)), rewards_list, 'plots/reward_plot.png')
+    reward_plot(list(range(1, args.episodes + 1)), rewards_list, 'plots/reward_plot.png', False)
     plot_q_values_map(Q, environment, "plots/q_values_map.png")
     plot_states_actions_distribution(states, actions, 'plots/states_actions_distribution.png')
 
