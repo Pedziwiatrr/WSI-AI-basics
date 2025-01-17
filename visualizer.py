@@ -44,7 +44,7 @@ def qtable_directions_map(qtable):
     qtable_directions = np.empty(qtable_best_action.flatten().shape, dtype=str)
     eps = np.finfo(float).eps
     for idx, val in enumerate(qtable_best_action.flatten()):
-        if qtable_val_max.flatten()[idx] > eps:
+        if qtable_val_max.flatten()[idx] > float('-inf'):
             qtable_directions[idx] = directions[val]
     return qtable_val_max, qtable_directions
 
