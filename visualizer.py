@@ -3,6 +3,7 @@ import matplotlib
 import numpy as np
 import pandas as pd
 import seaborn as sns
+from collections import Counter
 
 sns.set_theme()
 matplotlib.use('Agg')
@@ -16,12 +17,27 @@ def analyze_rewards(rewards):
     return average_reward, best_reward, average_reward_last_100
 
 
+def print_states(states):
+    state_counts = Counter(states)
+    print(">------------------------------------------------------<")
+    for state, count in state_counts.most_common():
+        print(f"    state: {state}       occurences:{count}")
+
+
+def print_actions(actions):
+    action_counts = Counter(actions)
+    print(">------------------------------------------------------<")
+    for action, count in action_counts.most_common():
+        print(f"    action: {action}       occurences:{count}")
+
+
 def reward_plot(episodes, rewards, savefig_file='plots/reward_plot.png'):
     plt.figure(figsize=(15, 10))
     plt.plot(episodes, rewards, linestyle='-', color='b', label='Reward')
 
-    smoothed_rewards = np.convolve(rewards, np.ones(20) / 20, mode='valid')
-    plt.plot(episodes[19:], smoothed_rewards, linewidth=2, linestyle='-', color='r', label='Trend Line')
+    if len(episodes) > 50:
+        smoothed_rewards = np.convolve(rewards, np.ones(20) / 20, mode='valid')
+        plt.plot(episodes[19:], smoothed_rewards, linewidth=2, linestyle='-', color='r', label='Trend Line')
 
     plt.title('Reward over Episodes')
     plt.xlabel('Episode')
@@ -52,7 +68,7 @@ def qtable_directions_map(qtable):
     qtable_directions = np.empty(qtable_best_action.flatten().shape, dtype=str)
     eps = np.finfo(float).eps
     for idx, val in enumerate(qtable_best_action.flatten()):
-        if qtable_val_max.flatten()[idx] != 0:
+        if qtable_val_max.flatten()[idx] !=0:
             qtable_directions[idx] = directions[val]
     return qtable_val_max, qtable_directions
 
@@ -60,8 +76,10 @@ def qtable_directions_map(qtable):
 def plot_states_actions_distribution(states, actions, savefig_file='plots/states_actions_distribution.png'):
     labels = {"LEFT": 3, "DOWN": 2, "RIGHT": 1, "UP": 0}
     fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(15, 5))
-    sns.histplot(data=states, ax=ax[0], kde=True)
-    ax[0].set_title("States")
+    sns.histplot(states, ax=ax[0], kde=True, color="blue")
+    ax[0].set_title("States Distribution")
+    ax[0].set_xlabel("State")
+    ax[0].set_ylabel("Count")
     sns.histplot(data=actions, ax=ax[1])
     ax[1].set_xticks(list(labels.values()), labels=labels.keys())
     ax[1].set_title("Actions")
