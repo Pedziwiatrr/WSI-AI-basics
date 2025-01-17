@@ -31,7 +31,7 @@ def print_actions(actions):
         print(f"    action: {action}       occurences:{count}")
 
 
-def reward_plot(episodes, rewards, savefig_file='plots/reward_plot.png'):
+def reward_plot(episodes, rewards, savefig_file='plots/reward_plot.png', y_lim=True):
     plt.figure(figsize=(15, 10))
     plt.plot(episodes, rewards, linestyle='-', color='b', label='Reward')
 
@@ -42,7 +42,8 @@ def reward_plot(episodes, rewards, savefig_file='plots/reward_plot.png'):
     plt.title('Reward over Episodes')
     plt.xlabel('Episode')
     plt.ylabel('Reward')
-    plt.ylim(-1000)
+    if y_lim:
+        plt.ylim(-1000)
     plt.legend()
     plt.grid(True)
     plt.savefig(savefig_file)
