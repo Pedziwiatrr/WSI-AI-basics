@@ -2,19 +2,16 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from sklearn.linear_model import LinearRegression
 
 sns.set_theme()
 
 
 def reward_plot(episodes, rewards, savefig_file='plots/reward_plot.png'):
-    plt.figure(figsize=(15, 5))
+    plt.figure(figsize=(15, 10))
     plt.plot(episodes, rewards, linestyle='-', color='b', label='Reward')
 
-    model = LinearRegression()
-    model.fit(np.array(episodes).reshape(-1, 1), rewards)
-    trend = model.predict(np.array(episodes).reshape(-1, 1))
-    plt.plot(episodes, trend, linestyle='-', color='r', label='Trend Line')
+    smoothed_rewards = np.convolve(rewards, np.ones(20) / 20, mode='valid')
+    plt.plot(episodes[19:], smoothed_rewards, linewidth=2, linestyle='-', color='r', label='Trend Line')
 
     plt.title('Reward over Episodes')
     plt.xlabel('Episode')
