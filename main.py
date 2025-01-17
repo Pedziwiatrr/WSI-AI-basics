@@ -6,9 +6,9 @@ from visualizer import reward_plot, postprocess, plot_q_values_map, plot_states_
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--episodes', type=int, default=100)
+    parser.add_argument('--episodes', type=int, default=300)
     parser.add_argument('--max_steps', type=int, default=1000)
-    parser.add_argument('--epsilon', type=float, default=0.2)
+    parser.add_argument('--epsilon', type=float, default=0.0001)
     parser.add_argument('--beta', type=float, default=0.1)
     parser.add_argument('--gamma', type=float, default=0.9)
     args = parser.parse_args()
