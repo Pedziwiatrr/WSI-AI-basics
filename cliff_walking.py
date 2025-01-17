@@ -24,7 +24,7 @@ def q_learn(environment, episode_count=10, max_steps=1000, beta=0.8, gamma=0.1, 
             # delta will store the error between our current state and the next state
             # predicted future reward is discounted by gamma because
             # we don't want it to impact our decisions too much as it might be incorrect.
-            delta = reward + gamma * np.max(Q[next_state, :]) - Q[state, action]  # ∆ ← rt + γ max Qt(xt+1,a) − Qt(xt,at)
+            delta = reward + gamma * np.max(Q[next_state, :]) - Q[state, action]                     # ∆ ← rt + γ max Qt(xt+1,a) − Qt(xt,at)
             Q[state, action] += beta * delta                                                        # Qt+1 ← Qt + β∆
 
             state = next_state
@@ -41,7 +41,7 @@ def q_learn(environment, episode_count=10, max_steps=1000, beta=0.8, gamma=0.1, 
 
         rewards_list.append(sum_reward)
         steps_list.append(steps)
-        print(f'>> Finished episode: {episode}, steps: {steps}, Reward sum: {sum_reward} <<')
+        #print(f'>> Finished episode: {episode}, steps: {steps}, Reward sum: {sum_reward} <<')
 
     return Q, rewards_list, steps_list, states, actions
 
