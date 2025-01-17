@@ -1,9 +1,19 @@
 import matplotlib.pyplot as plt
+import matplotlib
 import numpy as np
 import pandas as pd
 import seaborn as sns
 
 sns.set_theme()
+matplotlib.use('Agg')
+
+
+def analyze_rewards(rewards):
+    average_reward = np.mean(rewards)
+    best_reward = np.max(rewards)
+    average_reward_last_100 = np.mean(rewards[-100:])
+
+    return average_reward, best_reward, average_reward_last_100
 
 
 def reward_plot(episodes, rewards, savefig_file='plots/reward_plot.png'):
@@ -48,7 +58,7 @@ def qtable_directions_map(qtable):
 
 
 def plot_states_actions_distribution(states, actions, savefig_file='plots/states_actions_distribution.png'):
-    labels = {"LEFT": 0, "DOWN": 1, "RIGHT": 2, "UP": 3}
+    labels = {"LEFT": 3, "DOWN": 2, "RIGHT": 1, "UP": 0}
     fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(15, 5))
     sns.histplot(data=states, ax=ax[0], kde=True)
     ax[0].set_title("States")
