@@ -12,6 +12,7 @@ def visualize_network(network):
 
     plt.title("Bayesian Network Visualization")
     plt.savefig("bayesian_network.png")
+    plt.close()
 
 
 def print_feature_dependencies(dependencies_dict):
@@ -29,3 +30,12 @@ def print_probabilities_distribution(distributions_dict):
         print(f"> {feature}'s distribution:")
         print(f"{distribution}")
 
+
+def plot_probability_distributions(marginal_probabilities):
+    for feature, probabilities in marginal_probabilities.items():
+        plt.bar(range(len(probabilities)), probabilities.flatten(), alpha=0.7)
+        plt.title(f'Probability Distribution of {feature}')
+        plt.xlabel('Value')
+        plt.ylabel('Probability')
+        plt.savefig(f'plots/probability_distribution_plot_of_{feature.lower()}.png')
+        plt.close()
