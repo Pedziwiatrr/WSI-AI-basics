@@ -21,8 +21,9 @@ def generate_murder(distributions_dict, marginal_probabilities_dict, murder_data
                 #print(f"Shape of probabilities: {probabilities.shape}")
 
                 if probabilities.ndim > 1:
-                    # Iterating in reverse so the previous indexes won't change
+                    # ndim > 1 -> this feature has parents
                     for parent, parent_value in reversed(list(parent_values.items())):
+                    # Iterating in reverse so the previous indexes won't change
                         #print(f"parent: {parent}, parent_value: {parent_value}")
                         if parent_value == '?':
                             # if the feature depends on other missing feature we generate it basing on marginal_probabilities
@@ -32,6 +33,7 @@ def generate_murder(distributions_dict, marginal_probabilities_dict, murder_data
                             #print(f"missing feature {feature} depends on other missing feature")
                         parent_index = distribution.variables.index(parent)
                         state_index = distribution.state_names[parent].index(parent_value)
+                        # take only the probabilities that match our case (our parent/influencer)
                         probabilities = np.take(probabilities, state_index, axis=parent_index)
                         #print(f"parent_index: {parent_index}, parent_value: {parent_value}, state_index: {state_index}, probabilities dim: {probabilities.ndim}")
 
@@ -41,6 +43,7 @@ def generate_murder(distributions_dict, marginal_probabilities_dict, murder_data
                     # Roulette selection like in evolution algorithm
                     murder_data[feature] = random.choices(possible_values, weights=combined_probabilities, k=1)[0]
                 else:
+                    # ndim == 1 -> this feature has no parents (its not influenced by other features)
                     probabilities = marginal_probabilities_dict[feature]
                     possible_values = list(probabilities.keys())
                     weights = list(probabilities.values())
