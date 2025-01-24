@@ -1,7 +1,7 @@
 import argparse
 from handle_data import get_numerical_data
 from bayesian_network import create_network, get_feature_probability_distribution, get_feature_dependencies
-from visualizer import visualize_network, visualize_feature_dependencies, visualize_probabilities_distribution
+from visualizer import visualize_network, print_feature_dependencies, print_probabilities_distribution
 
 
 def main():
@@ -10,10 +10,11 @@ def main():
     visualize_network(network)
 
     dependencies_dict = get_feature_dependencies(network)
-    visualize_feature_dependencies(dependencies_dict)
+    print_feature_dependencies(dependencies_dict)
 
     distributions_dict = get_feature_probability_distribution(network)
-    visualize_probabilities_distribution(distributions_dict)
+    print_probabilities_distribution(distributions_dict)
+
 
 if __name__ == '__main__':
     main()
