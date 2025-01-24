@@ -10,6 +10,7 @@ def create_network(data):
 
     # use the best structure to create our network
     network = BayesianNetwork(best_network.edges())
+    # estimate conditional probabilities for different data occurrences
     network.fit(data, estimator=MaximumLikelihoodEstimator)
 
     return network
