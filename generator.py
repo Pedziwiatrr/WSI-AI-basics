@@ -35,16 +35,16 @@ def generate_murder(distributions_dict, marginal_probabilities_dict, murder_data
                         probabilities = np.take(probabilities, state_index, axis=parent_index)
                         #print(f"parent_index: {parent_index}, parent_value: {parent_value}, state_index: {state_index}, probabilities dim: {probabilities.ndim}")
 
-                combined_probabilities = probabilities / np.sum(probabilities)
-                #print(f"Normalized probabilities: {combined_probabilities}")
+                    combined_probabilities = probabilities / np.sum(probabilities)
+                    # print(f"Normalized probabilities: {combined_probabilities}")
 
-                # Roulette selection like in evolution algorithm
-                murder_data[feature] = random.choices(possible_values, weights=combined_probabilities, k=1)[0]
-            else:
-                probabilities = marginal_probabilities_dict[feature]
-                possible_values = list(probabilities.keys())
-                weights = list(probabilities.values())
+                    # Roulette selection like in evolution algorithm
+                    murder_data[feature] = random.choices(possible_values, weights=combined_probabilities, k=1)[0]
+                else:
+                    probabilities = marginal_probabilities_dict[feature]
+                    possible_values = list(probabilities.keys())
+                    weights = list(probabilities.values())
 
-                murder_data[feature] = random.choices(possible_values, weights=weights, k=1)[0]
+                    murder_data[feature] = random.choices(possible_values, weights=weights, k=1)[0]
 
     return murder_data
