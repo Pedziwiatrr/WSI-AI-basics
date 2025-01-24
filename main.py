@@ -17,7 +17,6 @@ def main():
     parser.add_argument('--additional_plots', action='store_true')
 
     parser.add_argument('--print_distributions', action='store_true')
-    parser.add_argument('--print_dependencies', action='store_true')
     parser.add_argument('--print_marginal_probabilities', action='store_true')
 
     parser.add_argument('--generate', action='store_true')
@@ -44,8 +43,6 @@ def main():
 
     if args.print_distributions:
         print_probabilities_distribution(distributions_dict)
-    if args.print_dependencies:
-        print_feature_dependencies(dependencies_dict)
     if args.print_marginal_probabilities:
         print_marginal_probabilities(marginal_probabilities_dict)
     if args.additional_plots:
