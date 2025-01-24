@@ -36,12 +36,11 @@ def get_feature_dependencies(network):
     return dependencies
 
 
-def get_marginal_probabilities(probability_distribution):
+def get_marginal_probabilities(data):
     marginal_probabilities = {}
-    for feature, cpd in probability_distribution.items():
-        if len(cpd.values.shape) == 1:
-            marginal_probabilities[feature] = cpd.values
-        else:
-            marginal_probabilities[feature] = cpd.values.sum(axis=tuple(range(1, cpd.values.ndim)))
+
+    for feature in data.columns:
+        value_counts = data[feature].value_counts(normalize=True)
+        marginal_probabilities[feature] = value_counts.to_dict()
 
     return marginal_probabilities
