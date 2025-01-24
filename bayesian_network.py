@@ -32,4 +32,16 @@ def get_feature_dependencies(network):
         dependencies[edge[0]].append((edge[1]))
         #print(f"edge: {edge[0]} -> {edge[1]}")
     #print(f"\ndependencies: {dependencies}\n")
+
     return dependencies
+
+
+def get_marginal_probabilities(probability_distribution):
+    marginal_probabilities = {}
+    for feature, cpd in probability_distribution.items():
+        if len(cpd.values.shape) == 1:
+            marginal_probabilities[feature] = cpd.values
+        else:
+            marginal_probabilities[feature] = cpd.values.sum(axis=tuple(range(1, cpd.values.ndim)))
+    print(marginal_probabilities)
+    return marginal_probabilities
