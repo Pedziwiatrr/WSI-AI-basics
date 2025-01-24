@@ -14,9 +14,11 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--network_plot', action='store_true')
     parser.add_argument('--additional_plots', action='store_true')
+
     parser.add_argument('--print_distributions', action='store_true')
     parser.add_argument('--print_dependencies', action='store_true')
     parser.add_argument('--print_marginal_probabilities', action='store_true')
+
     parser.add_argument('--generate', action='store_true')
 
     parser.add_argument('--victim_sex', default='?', type=str)
