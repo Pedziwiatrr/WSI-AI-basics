@@ -30,8 +30,6 @@ def get_feature_dependencies(network):
     dependencies = defaultdict(list)
     for edge in network.edges():
         dependencies[edge[0]].append((edge[1]))
-        #print(f"edge: {edge[0]} -> {edge[1]}")
-    #print(f"\ndependencies: {dependencies}\n")
 
     return dependencies
 
