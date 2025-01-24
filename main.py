@@ -16,12 +16,10 @@ def main():
         visualize_network(network)
 
     dependencies_dict = get_feature_dependencies(network)
-
     distributions_dict = get_feature_probability_distribution(network)
-
     if args.additional_prints:
-        #print_probabilities_distribution(distributions_dict)
-        #print_feature_dependencies(dependencies_dict)
+        print_probabilities_distribution(distributions_dict)
+        print_feature_dependencies(dependencies_dict)
 
 
 if __name__ == '__main__':
