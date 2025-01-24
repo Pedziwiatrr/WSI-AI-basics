@@ -33,9 +33,27 @@ def print_probabilities_distribution(distributions_dict):
 
 def plot_probability_distributions(marginal_probabilities):
     for feature, probabilities in marginal_probabilities.items():
-        plt.bar(range(len(probabilities)), probabilities.flatten(), alpha=0.7)
+
+        values = list(probabilities.keys())
+        probs = list(probabilities.values())
+
+        plt.figure(figsize=(20, 10))
+        plt.bar(values, probs, alpha=0.7)
         plt.title(f'Probability Distribution of {feature}')
         plt.xlabel('Value')
         plt.ylabel('Probability')
+        if feature == 'Victim Age' or feature == 'Perpetrator Age':
+            plt.xticks(values, fontsize=8)
+        else:
+            plt.xticks(values, rotation=45, fontsize=20)
+        plt.tight_layout()
         plt.savefig(f'plots/probability_distribution_plot_of_{feature.lower()}.png')
         plt.close()
+
+
+def print_marginal_probabilities(marginal_probabilities):
+    for feature, probabilities in marginal_probabilities.items():
+        print("-" * 100)
+        print(f"\n> Feature: {feature}")
+        for value, probability in probabilities.items():
+            print(f"    {value}: {probability:.4f}")
