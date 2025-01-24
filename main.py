@@ -1,8 +1,8 @@
 import argparse
 import matplotlib
-from handle_data import get_numerical_data
+from handle_data import get_numerical_data, get_prepared_data
 from bayesian_network import create_network, get_feature_probability_distribution, get_feature_dependencies, get_marginal_probabilities
-from visualizer import visualize_network, print_feature_dependencies, print_probabilities_distribution, plot_probability_distributions
+from visualizer import visualize_network, print_feature_dependencies, print_probabilities_distribution, plot_probability_distributions, print_marginal_probabilities
 
 
 def main():
@@ -15,22 +15,22 @@ def main():
     parser.add_argument('--print_dependencies', action='store_true')
     parser.add_argument('--print_marginal_probabilities', action='store_true')
     args = parser.parse_args()
-
-    data = get_numerical_data()
+    
+    data = get_prepared_data()
     network = create_network(data)
     if args.network_plot:
         visualize_network(network)
 
     dependencies_dict = get_feature_dependencies(network)
     distributions_dict = get_feature_probability_distribution(network)
-    marginal_probabilities_dict = get_marginal_probabilities(distributions_dict)
+    marginal_probabilities_dict = get_marginal_probabilities(data)
 
     if args.print_distributions:
         print_probabilities_distribution(distributions_dict)
     if args.print_dependencies:
         print_feature_dependencies(dependencies_dict)
     if args.print_marginal_probabilities:
-        print(marginal_probabilities_dict)
+        print_marginal_probabilities(marginal_probabilities_dict)
 
     if args.additional_plots:
         plot_probability_distributions(marginal_probabilities_dict)
