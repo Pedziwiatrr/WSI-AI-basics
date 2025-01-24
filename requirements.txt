@@ -1,0 +1,5 @@
+pgmpy
+matplotlib
+argparse
+logging
+copy
