@@ -1,5 +1,6 @@
 import argparse
 import matplotlib
+import logging
 from handle_data import get_numerical_data, get_prepared_data
 from bayesian_network import create_network, get_feature_probability_distribution, get_feature_dependencies, get_marginal_probabilities
 from visualizer import visualize_network, print_feature_dependencies, print_probabilities_distribution, plot_probability_distributions, print_marginal_probabilities
@@ -20,6 +21,7 @@ INCOMPLETE_MURDER_DATA = {
 
 def main():
     matplotlib.use('Agg')
+    logging.getLogger("matplotlib").setLevel(logging.ERROR)
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--network_plot', action='store_true')
