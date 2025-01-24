@@ -1,6 +1,7 @@
 import argparse
 import matplotlib
 import logging
+import copy
 from handle_data import get_prepared_data
 from bayesian_network import create_network, get_feature_probability_distribution, get_feature_dependencies, get_marginal_probabilities
 from visualizer import visualize_network, print_feature_dependencies, print_probabilities_distribution, plot_probability_distributions, print_marginal_probabilities
@@ -20,6 +21,7 @@ def main():
     parser.add_argument('--print_marginal_probabilities', action='store_true')
 
     parser.add_argument('--generate', action='store_true')
+    parser.add_argument('--count', default=1, type=int)
 
     parser.add_argument('--victim_sex', default='?', type=str)
     parser.add_argument('--victim_age', default='?', type=str)
@@ -60,8 +62,12 @@ def main():
         incomplete_murder_data['Relationship'] = args.relationship
         incomplete_murder_data['Weapon'] = args.weapon
         print(f"\nINPUT MURDER DATA:\n {incomplete_murder_data}\n")
-        generated_murder = generate_murder(distributions_dict, marginal_probabilities_dict, incomplete_murder_data)
-        print(f"OUTPUT MURDER DATA:\n {generated_murder}\n")
+        for i in range(args.count):
+            if args.count != 1:
+                print(f"< {i+1} >")
+            incomplete_murder_data_copy = copy.deepcopy(incomplete_murder_data)
+            generated_murder = generate_murder(distributions_dict, marginal_probabilities_dict, incomplete_murder_data_copy)
+            print(f"OUTPUT MURDER DATA:\n {generated_murder}\n")
 
 
 if __name__ == '__main__':
