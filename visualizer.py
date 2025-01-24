@@ -50,6 +50,8 @@ def plot_probability_distributions(marginal_probabilities):
         plt.ylabel('Probability')
         if feature == 'Victim Age' or feature == 'Perpetrator Age':
             plt.xticks(values, fontsize=8)
+        elif feature == 'Relationship':
+            plt.xticks(values, rotation=60, fontsize=15)
         else:
             plt.xticks(values, rotation=45, fontsize=20)
         plt.tight_layout()
