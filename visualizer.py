@@ -33,6 +33,12 @@ def print_probabilities_distribution(distributions_dict):
 
 def plot_probability_distributions(marginal_probabilities):
     for feature, probabilities in marginal_probabilities.items():
+        if feature in ['Victim Age', 'Perpetrator Age']:
+            probabilities = {
+                value: prob for value, prob in probabilities.items()
+                if 1 <= int(value) < 99
+            }
+            probabilities = dict(sorted(probabilities.items(), key=lambda x: int(x[0])))
 
         values = list(probabilities.keys())
         probs = list(probabilities.values())
