@@ -10,11 +10,11 @@ INCOMPLETE_MURDER_DATA = {
     'Victim Sex': '?',
     'Victim Age': '20',
     'Victim Race': '?',
-    'Perpetrator Sex': 'male',
+    'Perpetrator Sex': 'Male',
     'Perpetrator Age': '?',
-    'Perpetrator Race': 'asian',
-    'Relationship': 'friend',
-    'Weapon': 'strangulation'
+    'Perpetrator Race': 'Asian',
+    'Relationship': 'Friend',
+    'Weapon': 'Strangulation'
 }
 
 
