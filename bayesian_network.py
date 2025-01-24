@@ -43,5 +43,5 @@ def get_marginal_probabilities(probability_distribution):
             marginal_probabilities[feature] = cpd.values
         else:
             marginal_probabilities[feature] = cpd.values.sum(axis=tuple(range(1, cpd.values.ndim)))
-    print(marginal_probabilities)
+
     return marginal_probabilities
