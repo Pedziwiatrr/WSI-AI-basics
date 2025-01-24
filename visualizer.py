@@ -26,5 +26,6 @@ def print_feature_dependencies(dependencies_dict):
 def print_probabilities_distribution(distributions_dict):
     print("-"*100)
     for feature, distribution in distributions_dict.items():
-        print(f"> {feature}'s distribution: {distribution}")
+        print(f"> {feature}'s distribution:")
+        print(f"{distribution}")
 
