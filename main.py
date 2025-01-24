@@ -47,7 +47,7 @@ def main():
         print_marginal_probabilities(marginal_probabilities_dict)
     if args.additional_plots:
         plot_probability_distributions(marginal_probabilities_dict)
-    if args.complete:
+    if args.generate
         generated_murder = generate_murder(dependencies_dict, marginal_probabilities_dict, INCOMPLETE_MURDER_DATA)
         print(generated_murder)
 
