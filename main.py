@@ -1,22 +1,10 @@
 import argparse
 import matplotlib
 import logging
-from handle_data import get_numerical_data, get_prepared_data
+from handle_data import get_prepared_data
 from bayesian_network import create_network, get_feature_probability_distribution, get_feature_dependencies, get_marginal_probabilities
 from visualizer import visualize_network, print_feature_dependencies, print_probabilities_distribution, plot_probability_distributions, print_marginal_probabilities
 from generator import generate_murder
-
-
-INCOMPLETE_MURDER_DATA = {
-    'Victim Sex': '?',
-    'Victim Age': '20',
-    'Victim Race': '?',
-    'Perpetrator Sex': 'Male',
-    'Perpetrator Age': '?',
-    'Perpetrator Race': 'Asian',
-    'Relationship': 'Friend',
-    'Weapon': 'Strangulation'
-}
 
 
 def main():
@@ -30,6 +18,15 @@ def main():
     parser.add_argument('--print_dependencies', action='store_true')
     parser.add_argument('--print_marginal_probabilities', action='store_true')
     parser.add_argument('--generate', action='store_true')
+
+    parser.add_argument('--victim_sex', default='?', type=str)
+    parser.add_argument('--victim_age', default='?', type=str)
+    parser.add_argument('--victim_race', default='?', type=str)
+    parser.add_argument('--perpetrator_sex', default='?', type=str)
+    parser.add_argument('--perpetrator_age', default='?', type=str)
+    parser.add_argument('--perpetrator_race', default='?', type=str)
+    parser.add_argument('--relationship', default='?', type=str)
+    parser.add_argument('--weapon', default='?', type=str)
     args = parser.parse_args()
     
     data = get_prepared_data()
@@ -49,9 +46,20 @@ def main():
         print_marginal_probabilities(marginal_probabilities_dict)
     if args.additional_plots:
         plot_probability_distributions(marginal_probabilities_dict)
+
     if args.generate:
-        generated_murder = generate_murder(distributions_dict, marginal_probabilities_dict, INCOMPLETE_MURDER_DATA)
-        print(generated_murder)
+        incomplete_murder_data = dict()
+        incomplete_murder_data['Victim Sex'] = args.victim_sex
+        incomplete_murder_data['Victim Age'] = args.victim_age
+        incomplete_murder_data['Victim Race'] = args.victim_race
+        incomplete_murder_data['Perpetrator Sex'] = args.perpetrator_sex
+        incomplete_murder_data['Perpetrator Age'] = args.perpetrator_age
+        incomplete_murder_data['Perpetrator Race'] = args.perpetrator_race
+        incomplete_murder_data['Relationship'] = args.relationship
+        incomplete_murder_data['Weapon'] = args.weapon
+        print(f"\nINPUT MURDER DATA:\n {incomplete_murder_data}\n")
+        generated_murder = generate_murder(distributions_dict, marginal_probabilities_dict, incomplete_murder_data)
+        print(f"OUTPUT MURDER DATA:\n {generated_murder}\n")
 
 
 if __name__ == '__main__':
