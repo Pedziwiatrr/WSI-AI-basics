@@ -12,3 +12,19 @@ def visualize_network(network):
 
     plt.title("Bayesian Network Visualization")
     plt.savefig("bayesian_network.png")
+
+
+def print_feature_dependencies(dependencies_dict):
+    print("-"*100)
+    for feature, dependencies in dependencies_dict.items():
+        if dependencies:
+            print(f"> {feature}: is influenced by:")
+            for dependency in dependencies:
+                print(f"    <- {dependency}")
+
+
+def print_probabilities_distribution(distributions_dict):
+    print("-"*100)
+    for feature, distribution in distributions_dict.items():
+        print(f"> {feature}'s distribution: {distribution}")
+
